@@ -7,11 +7,20 @@ var formidable = require("formidable");
 
 http.createServer(function (req, res) {
 
+
    if (req.url === "/fileupload") {
       var form = new formidable.IncomingForm();
       form.parse(req, function (err, fields, files) {
-         res.write('File uploaded');
-         res.end();
+
+         console.log(files.filetoupload);
+
+         var oldpath = files.filetoupload.path;
+         var newpath = './' + files.filetoupload.name;
+         fs.rename(oldpath, newpath, function(err) {
+            if (err) throw err;
+            res.write("File moved!");
+            res.end();
+         })
       });
    }
    else {
