@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/CL2228/Full-Stack/issues"
   },
-  "homepage": "https://github.com/CL2228/Full-Stack#readme"
+  "homepage": "https://github.com/CL2228/Full-Stack#readme",
+  "dependencies": {
+    "formidable": "^1.2.2"
+  }
 }
