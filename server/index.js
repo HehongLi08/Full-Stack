@@ -1,15 +1,11 @@
 // full_stack/index.js
 
 const express = require("express");
+var app = express();
 
-const PORT = process.env.PORT || 3001;
+app.set('view engine', 'pug');
+app.set('views', './views');
 
-const app = express();
 
-app.get("/api", (req, res) => {
-    res.json( {message: "Hello MZX!"});
-});
 
-app.listen(PORT, () => {
-    console.log(`Server listening on ${PORT}`);
-});
+app.listen(3000);
