@@ -47,6 +47,15 @@ export default class App extends Component {
     render() {
         return (
             <div className = "container">
+                <form action="http://localhost:3001/user" method="GET">
+                    UserName: <input type="text" name="first_name" /> <br/>
+                    Password: <input type="text" name="last_name" /> <br/>
+                    <input type="submit" value="Log in"/>
+
+
+                </form>
+
+
                 {this.state.list ? (
                     <div className="list-group">
                         {this.state.players.map(player => (
