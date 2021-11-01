@@ -47,9 +47,9 @@ export default class App extends Component {
     render() {
         return (
             <div className = "container">
-                <form action="http://localhost:3001/user" method="GET">
-                    UserName: <input type="text" name="first_name" /> <br/>
-                    Password: <input type="text" name="last_name" /> <br/>
+                <form action="http://localhost:3001/user" method="POST">
+                    UserName: <input type="text" name="username" /> <br/>
+                    Password: <input type="text" name="password" /> <br/>
                     <input type="submit" value="Log in"/>
 
 
