@@ -24,8 +24,7 @@ var userModel = mongoose.model('users', userSchema);
 router.post("/", async function (req, res) {
     var reqBody = req.body;
 
-    var query = userModel.find({username: "cl2228"});
-    console.log(query);
+    console.log(req);
     // userModel.create({username: reqBody.username, password: reqBody.password }, (err) => {
     //     if (err) console.log("CreateError:" + err);
     //     console.log("created!");

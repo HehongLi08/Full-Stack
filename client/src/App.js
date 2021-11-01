@@ -43,18 +43,23 @@ export default class App extends Component {
         });
     };
 
+    uploadHandler(event) {
+        console.log("haha!");
+        console.log(event.target.files[0]);
+    }
 
     render() {
         return (
+            // the test window for the login/register
             <div className = "container">
                 <form action="http://localhost:3001/user" method="POST">
                     UserName: <input type="text" name="username" /> <br/>
                     Password: <input type="text" name="password" /> <br/>
                     <input type="submit" value="Log in"/>
-
-
+                    <input type="submit" value="register"/>
                 </form>
 
+                <input type="file" name="file" onChange={this.uploadHandler}/>
 
                 {this.state.list ? (
                     <div className="list-group">
