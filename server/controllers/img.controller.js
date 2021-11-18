@@ -1,5 +1,5 @@
-const upload = require("../middleware/upload");
-const dbConfig = require("../config/db");
+const upload = require("../middleware/img.middleware");
+const dbConfig = require("../config/db.config");
 
 const {ObjectId} = require("mongodb");
 const MongoClient = require("mongodb").MongoClient;
@@ -7,10 +7,10 @@ const GridFSBucket = require("mongodb").GridFSBucket;
 
 const url = dbConfig.url;
 
-const baseUrl = "http://localhost:8080/files/";
 
 const mongoClient = new MongoClient(url);
 
+// upload files, note that this function will be need for user system
 const uploadFiles = async function (req, res) {
     try {
         // use the middleware to upload the file
@@ -43,6 +43,7 @@ const uploadFiles = async function (req, res) {
     }
 };
 
+
 const getListFiles = async function (req, res) {
     console.log("getListFiles...");
     // console.log(req.body);
@@ -63,11 +64,11 @@ const getListFiles = async function (req, res) {
         await cursor.forEach((doc) => {
             fileInfos.push({
                 name: doc.filename,
-                url: baseUrl + doc.filename
+                url: dbConfig.imgBaseUrl + doc.filename
             });
         });
         return res.status(200).send(fileInfos);
-    } catch (erroe) {
+    } catch (error) {
         return res.status(500).send({
             message: error.message
         });
@@ -133,7 +134,9 @@ const deleteFile = async function (req, res) {
 
         const imgChunkCollection = database.collection(dbConfig.imgBucket + ".chunks");
 
-       await imgObjectID.forEach( (d, i) => {
+        let deleted = [];
+
+        await imgObjectID.forEach( (d, i) => {
             // let chunkCursor = imgChunkCollection.find({files_id: d});
             imgNameCollection.deleteMany({_id: d}, () => {
                 console.log(`Image title with Object ID ${d.toHexString()} has been deleted!`);
@@ -141,6 +144,7 @@ const deleteFile = async function (req, res) {
             imgChunkCollection.deleteMany({files_id: d}, () => {
                 console.log(`Image Chunk with ObjectID ${d.toHexString()} has been deleted!`);
             });
+            deleted.push(d.toHexString());
         })
 
 
@@ -157,11 +161,10 @@ const deleteFile = async function (req, res) {
 
         // console.log("tag  " + await chunkCursor.count());
 
-
-
-
-
-        return res.status(200).send({message: "delete test"});
+        return res.status(200).send({
+            message: "delete test",
+            deleted: deleted
+        });
     }
     catch (error) {
         return res.status(500).send({
@@ -170,9 +173,16 @@ const deleteFile = async function (req, res) {
     }
 }
 
+const test = async function (req, res) {
+    res.status(200).send({
+        message: "tst"
+    });
+}
+
 module.exports = {
     uploadFiles,
     getListFiles,
     download,
-    deleteFile
+    deleteFile,
+    test
 };

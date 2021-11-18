@@ -14,7 +14,7 @@
             <div class="col-sm-8 mt-3">
                 <h4>Node.js upload images - cl2228</h4>
                 <form class="mt-4"
-                      action="/upload"
+                      action="/img/upload"
                       method="post"
                       enctype="multipart/form-data"
                 >
@@ -52,8 +52,8 @@
                         reader.onload = function(event) {
                             $($.parseHTML("<img>"))
                                 .attr("src", event.target.result)
-                                .attr("width", 400)
-                                .attr("height", 400)
+                                .attr("width", "50%")
+                                // .attr("height", 400)
                                 .appendTo(placeToInsertImagePreview);
                         };
                         reader.readAsDataURL(input.files[i]);

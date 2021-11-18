@@ -23,7 +23,7 @@ class App extends Component {
     }
 
     componentDidMount() {
-        http.get("/files")
+        http.get("/img/list")
             .then( response => {
                 this.setState({
                     imgUrls: response.data
@@ -48,18 +48,20 @@ class App extends Component {
         console.log(imgUrls);
       return(
         <div className="App">
+            <h1>Testing page for image uploading/retrieving</h1>
+            <FilesUploadComponent />
             <div>
                 <ul className="list-group-item">
-                    <img src="http://localhost:8080/files/1636909463176-cl2228-sample.jpg" width="30%" alt={""}/>
+                    {/*<img src="http://localhost:8080/files/1636909463176-cl2228-sample.jpg" width="30%" alt={""}/>*/}
                     {imgUrls && imgUrls.map((url, i) => (
                         <li>
-                            <img src={url.url}  alt={url.name} width="10%"/>
+                            <img src={url.url}  alt={url.name} width="100%"/>
                         </li>
                         ))
                     }
                 </ul>
             </div>
-          <FilesUploadComponent />
+
         </div>
     );
   }
