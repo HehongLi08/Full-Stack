@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import FilesUploadComponent from "./components/files-upload-component";
 // import axios from "axios";
 import http from "./http-common";
+import Config from "./config/config";
 
 
 
@@ -11,54 +12,50 @@ class App extends Component {
 
     constructor(props) {
         super(props);
-
-        this.getUrl = this.getUrl.bind(this);
-
         this.state = {
-            imgUrls: [],
-            // currentTutorial: null,
-            // currentIndex: -1,
-            // searchTitle: ""
+            posts: []
         };
     }
 
     componentDidMount() {
-        http.get("/img/list")
+        http.get("/post/get/all")
             .then( response => {
+                console.log("-----------------------------");
+                console.log(response);
                 this.setState({
-                    imgUrls: response.data
+                    posts: response.data.data
                 });
+                console.log("tag:   --------------");
+                console.log(this.state);
             });
     }
 
-    async getUrl () {
-        // const data = await ax.get("/files");
-        // const tmp = [];
-        // data.data.forEach((d) => {
-        //     tmp.push(d);
-        // })
-        // this.setState({
-        //     imgUrls: tmp
-        // })
-        // console.log(this.state);
-    }
+
 
     render() {
-        const { imgUrls } = this.state;
-        console.log(imgUrls);
+        // const { imgUrls } = this.state;
+        // console.log(imgUrls);
+        const { posts } = this.state;
+        console.log(this.state);
       return(
         <div className="App">
             <h1>Testing page for image uploading/retrieving</h1>
             <FilesUploadComponent />
             <div>
                 <ul className="list-group-item">
-                    {/*<img src="http://localhost:8080/files/1636909463176-cl2228-sample.jpg" width="30%" alt={""}/>*/}
-                    {imgUrls && imgUrls.map((url, i) => (
+                    {posts && posts.map( (p, i) => (
                         <li>
-                            <img src={url.url}  alt={url.name} width="100%"/>
+                            <h5>{"Title: " + p.title}</h5>
+                            <p>{"Price: " + p.price}</p>
+                            <p>{"Description: " + p.description}</p>
+                            <p>{"Seller: " + p.user}</p>
+                            {p.images && p.images.map( img => (
+                                <img src={Config.baseUrl + Config.imgGetRoute + img} alt={img} width="10%" />
+                            ))}
                         </li>
-                        ))
+                    ))
                     }
+
                 </ul>
             </div>
 

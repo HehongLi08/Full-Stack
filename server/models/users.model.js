@@ -1,4 +1,4 @@
-const dbConfig = require("../config/db.config");
+const dbConfig = require("../config/config");
 const {ObjectId} = require("mongodb");
 
 const mongoose = require("mongoose");

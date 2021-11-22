@@ -25,15 +25,6 @@ let routes = function (app) {
     router.delete("/img/delete/all", imgController.deleteAllImg);
     router.delete("/img/delete/:name", imgController.deleteOneImg)
 
-    // router.post("/img/posttest", upload.single('test'), function(req, res) {
-    //     console.log("multer test called----------------------");
-    //     console.log(req.username);
-    //     console.log(req.file);
-    //
-    //     res.status(200).send({
-    //         message: "multer test"
-    //     })
-    // });
 
     // user accounts manipulation routing
     router.get("/user/test", userController.test);
@@ -43,26 +34,13 @@ let routes = function (app) {
     router.delete("/user/delete", userController.deleteUser);
 
     // post manipulation routing
-    // router.post("/post/test", postController.test);
+    router.post("/post/test", postController.test);
     router.post("/post/create", postController.createPost);
+    router.get("/post/get/all", postController.getAllPosts);
+    router.get("/post/get/id/:id", postController.getById);
+    router.get("/post/get/title", postController.searchByTitle);
+    router.post("/post/update/:id", postController.updatePostById);
 
-
-
-
-
-    // const storage = multer.memoryStorage();
-    const storage = require("../middleware/img.middleware");
-    const upload = multer( {storage: storage});
-    const cpUpload = upload.fields([{name: "images", maxCount:5}]);
-    router.post("/post/test", cpUpload, () => {
-        console.log("haha");
-    });
-    //     , (req, res, next) => {
-    //     console.log(req.files);
-    //     return res.status(200).send({
-    //         message: "post creating test"
-    //     });
-    // });
 
 
     return app.use("/", router);

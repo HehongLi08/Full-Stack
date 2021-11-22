@@ -2,7 +2,7 @@
 const util = require("util");
 const multer = require("multer");
 const  { GridFsStorage } = require("multer-gridfs-storage");
-const dbConfig = require("../config/db.config");
+const dbConfig = require("../config/config");
 
 
 var storage = new GridFsStorage({
@@ -25,7 +25,7 @@ var storage = new GridFsStorage({
 });
 
 
-var uploadFiles = multer( { storage: storage}).array("images", 9);
+var uploadFiles = multer( { storage: storage}).array(dbConfig.imgUploadFieldName, dbConfig.maxImgCnt);
 var uploadFilesMiddleware = util.promisify(uploadFiles);
 module.exports = uploadFilesMiddleware;
 // module.exports = storage;

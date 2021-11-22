@@ -1,5 +1,5 @@
 const upload = require("../middleware/img.middleware");
-const dbConfig = require("../config/db.config");
+const dbConfig = require("../config/config");
 
 const {ObjectId} = require("mongodb");
 const MongoClient = require("mongodb").MongoClient;

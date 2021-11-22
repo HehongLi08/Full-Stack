@@ -145,7 +145,6 @@ const updateUserPwd = async function (req, res) {
 
 // get all the user information, only for internal testing-------
 const inspectAllUser = async function (req, res) {
-    console.log(req);
     let allUsers = await User.find();
     return res.status(200).send({
         data: allUsers

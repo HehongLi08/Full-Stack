@@ -1,4 +1,4 @@
-const dbConfig = require("../config/db.config");
+const dbConfig = require("../config/config");
 const {ObjectId} = require("mongodb");
 
 const mongoose = require("mongoose");
@@ -11,7 +11,7 @@ var schema = new mongoose.Schema({
         required: true
     },
     price: {
-        type: Number,
+        type: String,
         required: true
     },
     description: {
@@ -25,8 +25,8 @@ var schema = new mongoose.Schema({
     images: {
         type: [String],
         required: true
-    },
-});
+    }},
+    { timestamps: true });
 
 const Post = mongoose.model("posts", schema);
 module.exports = Post;

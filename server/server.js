@@ -1,13 +1,13 @@
 
 const express = require("express");
 const cors = require("cors");
-
+const Config = require("./config/config");
 const app = express();
 
 
 
 var corsOptions = {
-    origin: "http://localhost:3000"
+    origin: Config.corsUrl
 };
 
 app.use(cors(corsOptions));
@@ -17,7 +17,6 @@ app.use(express.urlencoded({ extended: true }));
 
 
 const db = require("./models");
-const path = require("path");
 db.mongoose.connect(db.url + db.database, {
     useNewUrlParser: true,
     useUnifiedTopology: true
