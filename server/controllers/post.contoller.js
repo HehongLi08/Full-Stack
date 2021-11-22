@@ -13,6 +13,8 @@ const test = async function (req, res) {
         message: "post test"
     });
 }
+
+
 /**
  * ***********************************************************************
  * Helper Functions
@@ -30,6 +32,7 @@ const deleteNewlyUploadedImages = async function(files) {
  * Exported Functions
  * ***********************************************************************
  */
+
 // create a post----------------------------------------------------
 const createPost = async function(req, res) {
     try {
@@ -160,7 +163,8 @@ const searchByTitle = async function(req, res) {
 // update a post, using its unique ObjectID-------------------------
 const updatePostById = async function(req, res) {
     try {
-        await updatePostById(req, res);
+        await imgUpload(req, res);
+
         if (req.files.length < 1) {
             return res.status(400).send({
                 message: "Must upload at lease one image!"
@@ -187,7 +191,9 @@ const updatePostById = async function(req, res) {
             });
         }
 
-        //now check the necessary fields to update the post
+        // check if any necessary filed is missing
+        // a Post Schema has:
+        // Title, Price, Description, User, Images
         if (!req.body.title) {
             let deleted = await deleteNewlyUploadedImages(req.files);
             return res.status(400).send({ message: "Must have a title", deleted: deleted.deleted });
@@ -206,35 +212,97 @@ const updatePostById = async function(req, res) {
         }
 
         // delete the old images in the old post
-        await imgController.deleteByNames(findRes[0].images);
+        let deletedOldImg = await imgController.deleteByNames(findRes[0].images);
 
-        // record the file name of images
+
         let imgUrls = [];
         req.files.forEach( (d, i) => {
             imgUrls.push(d.filename);
         });
 
         // the Schema for the new post
-        const post = new Post({
+        const newVal = {
             title: req.body.title,
             price: req.body.price,
             description: req.body.description,
             user: req.body.user,
             images: imgUrls
+        };
+
+        console.log(newVal);
+
+        let updated = await Post.findOneAndUpdate({_id: req.params.id}, newVal, {new: true});
+
+        res.status(200).send({
+            message: "Successfully updated!",
+            updated: updated,
+            deletedImg: deletedOldImg
         });
-
-        let updated = await Post.findOneAndUpdate({_id: req.params.id}, post, {new: true});
-
-
-        res.status(200).send({ message: "Successfully updated!" } );
     }
     catch (error) {
+
+        if (error.code === "LIMIT_UNEXPECTED_FILE") {
+            return res.status(400).send({
+                message: "Too many files to upload"
+            });
+        }
+
         res.status(500).send( {message: error } );
     }
 }
 
 
+// delete a post by provided ID-------------------------------------
+const deleteById = async function(req, res) {
+    try {
+        if (!req.params.id) {
+            return res.status(400).send({ message: "Must provide the post ID!" });
+        }
 
+        let findRes = await Post.find( {_id: req.params.id} );
+        for (let p of findRes) {
+            await imgController.deleteByNames(p.images);
+        }
+        for (let p of findRes) {
+            await Post.deleteMany({_id: req.params.id});
+        }
+
+        res.status(200).send({
+            message: `${findRes.length} post(s) deleted!`
+        });
+    }
+    catch (error) {
+        res.status(500).send({
+            message: error
+        });
+    }
+}
+
+
+// delete ALL posts [A DEVEL PROGRAM, JUST FOR TEST]----------------
+const deleteAll = async function(req, res) {
+    try {
+        let allPosts = await Post.find();
+        let imgList = [];
+        allPosts.forEach(p => {
+            p.images.forEach(img => imgList.push(img));
+        });
+        let imgDeleted = await imgController.deleteByNames(imgList);
+        await Post.deleteMany({});
+        res.status(200).send({
+            message: `${allPosts.length} post(s) deleted!`,
+            deletedImg: imgDeleted
+        });
+    }
+    catch (error) {
+        res.status(500).send({
+            message: error
+        });
+    }
+}
+
+
+//*******************************************************************************
 // export the module functions
 module.exports = {
     test,
@@ -242,5 +310,7 @@ module.exports = {
     getAllPosts,
     getById,
     searchByTitle,
-    updatePostById
+    updatePostById,
+    deleteById,
+    deleteAll
 }

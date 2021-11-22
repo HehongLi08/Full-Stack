@@ -7,8 +7,8 @@ const GridFSBucket = require("mongodb").GridFSBucket;
 
 const url = dbConfig.url;
 
-
 const mongoClient = new MongoClient(url);
+
 
 // upload files, note that this function will be need for user system
 const uploadFiles = async function (req, res) {

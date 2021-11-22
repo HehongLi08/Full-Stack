@@ -40,7 +40,8 @@ let routes = function (app) {
     router.get("/post/get/id/:id", postController.getById);
     router.get("/post/get/title", postController.searchByTitle);
     router.post("/post/update/:id", postController.updatePostById);
-
+    router.delete("/post/delete/all", postController.deleteAll);
+    router.delete("/post/delete/:id", postController.deleteById);
 
 
     return app.use("/", router);
