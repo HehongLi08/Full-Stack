@@ -1,11 +1,10 @@
 
 const express = require("express");
-
 const cors = require("cors");
 
 const app = express();
 
-const initRoutes =  require("./routes");
+
 
 var corsOptions = {
     origin: "http://localhost:3000"
@@ -14,10 +13,11 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.json());
-
 app.use(express.urlencoded({ extended: true }));
 
+
 const db = require("./models");
+const path = require("path");
 db.mongoose.connect(db.url + db.database, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -31,6 +31,7 @@ db.mongoose.connect(db.url + db.database, {
     });
 
 
+// apply the routing
 require("./routes")(app);
 
 

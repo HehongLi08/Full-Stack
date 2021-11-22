@@ -14,9 +14,8 @@ const mongoClient = new MongoClient(url);
 const uploadFiles = async function (req, res) {
     try {
         // use the middleware to upload the file
+
         await upload(req, res);
-        console.log("tag");
-        console.log(req.files[0]);
 
         if (req.files.length <= 0) {
             return res.status(400).send({
@@ -75,8 +74,8 @@ const getListFiles = async function (req, res) {
     }
 };
 
+
 const download = async function (req, res) {
-    console.log(req);
     try {
         await mongoClient.connect();
 
@@ -106,12 +105,35 @@ const download = async function (req, res) {
     }
 };
 
-const deleteFile = async function (req, res) {
+
+
+// delete one image by its filename
+const deleteOneImg = async function(req, res) {
     try {
+        if(!req.params.name) {
+            return res.status(400).send({
+                message: "Names of the images file must be provided"
+            });
+        }
 
-        // get the name of the target file to be deleted
-        const n = req.body.name;
+        let cb = await deleteByNames([req.params.name]);
 
+        res.status(200).send({
+            message: "Selected files have been deleted",
+            deleted: cb.deleted
+        });
+    }
+    catch (error) {
+        res.status(500).send({
+            message: error.message
+        });
+    }
+}
+
+
+
+const deleteAllImg = async function(req, res) {
+    try {
         // connect the mongodb and get the collection
         await mongoClient.connect();
         const database = mongoClient.db(dbConfig.database);
@@ -142,24 +164,10 @@ const deleteFile = async function (req, res) {
                 console.log(`Image title with Object ID ${d.toHexString()} has been deleted!`);
             });
             imgChunkCollection.deleteMany({files_id: d}, () => {
-                console.log(`Image Chunk with ObjectID ${d.toHexString()} has been deleted!`);
+                console.log(`Image chunk with Object ID ${d.toHexString()} has been deleted!`);
             });
             deleted.push(d.toHexString());
         })
-
-
-        // const chunkCursor = imgChunkCollection.find({files_id: imgObjectID[0]._id});
-
-
-        // await imgNameCollection.deleteMany({_id: new ObjectId("6191419796e4682b10313adc")}, () => {
-        //     console.log("img title deleted");
-        // })
-        //
-        // await imgChunkCollection.deleteMany({files_id: imgObjectID[0]._id}, () => {
-        //     console.log("img chunk deleted");
-        // })
-
-        // console.log("tag  " + await chunkCursor.count());
 
         return res.status(200).send({
             message: "delete test",
@@ -173,6 +181,43 @@ const deleteFile = async function (req, res) {
     }
 }
 
+
+const deleteByUrls = async function(urls) {
+    let names = [];
+    urls.forEach( d => {
+        if (d.length > dbConfig.imgBaseUrl.length)
+            names.push(d.substring(dbConfig.imgBaseUrl.length, d.length));
+    })
+    return await deleteByNames(names);
+}
+
+
+const deleteByNames = async function(names) {
+    await mongoClient.connect();
+    const database = mongoClient.db(dbConfig.database);
+    const imgNameCollection = database.collection(dbConfig.imgBucket + ".files");
+    const imgChunkCollection = database.collection(dbConfig.imgBucket + ".chunks");
+
+
+    let imgFileObjectId = [];
+    let deletedNames = [];
+    for (let n of names) {
+        const imgFileCursor = imgNameCollection.find({ filename: n });
+        await imgFileCursor.forEach( d => {
+            imgFileObjectId.push(d._id);
+            deletedNames.push(d.filename);
+        });
+    }
+
+    await imgFileObjectId.forEach( (d) => {
+        imgNameCollection.deleteMany({ _id: d});
+        imgChunkCollection.deleteMany( {files_id: d});
+    })
+    return { deleted: deletedNames };
+}
+
+
+
 const test = async function (req, res) {
     res.status(200).send({
         message: "tst"
@@ -183,6 +228,9 @@ module.exports = {
     uploadFiles,
     getListFiles,
     download,
-    deleteFile,
+    deleteAllImg,
+    deleteOneImg,
+    deleteByNames,
+    deleteByUrls,
     test
 };
