@@ -32,6 +32,7 @@ let routes = function (app) {
     router.get("/user/inspect", userController.inspectAllUser);
     router.post("/user/edit/", userController.updateUserPwd);
     router.delete("/user/delete", userController.deleteUser);
+    router.post("/user/verify", userController.verifyUser);
 
     // post manipulation routing
     router.post("/post/test", postController.test);

@@ -143,6 +143,28 @@ const updateUserPwd = async function (req, res) {
 }
 
 
+const verifyUser = async function (req, res) {
+    try {
+        if (!req.body.username) {
+            return res.status(400).send({ message: "Must provide a username!" });
+        }
+        if (!req.body.password) {
+            return res.status(400).send({ message: "Must provide a password!" });
+        }
+
+        let userFind = await User.find({ username: req.body.username } );
+        if (userFind.length < 1) {
+            return res.status(400).send({ message: "User does not exist!" });
+        }
+
+
+    }
+    catch (error) {
+        res.status(500).send({ message: error });
+    }
+}
+
+
 // get all the user information, only for internal testing-------
 const inspectAllUser = async function (req, res) {
     let allUsers = await User.find();
@@ -160,5 +182,6 @@ module.exports = {
     createUser,
     inspectAllUser,
     updateUserPwd,
-    deleteUser
+    deleteUser,
+    verifyUser
 }
