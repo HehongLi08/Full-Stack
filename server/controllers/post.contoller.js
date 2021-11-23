@@ -35,8 +35,12 @@ const deleteNewlyUploadedImages = async function(files) {
 
 // create a post----------------------------------------------------
 const createPost = async function(req, res) {
+    console.log("create called");
     try {
         await imgUpload(req, res);
+
+        console.log(req.files);
+        console.log(req.body);
 
         // if the user did not upload any images, should return the message that indicates the bad request
         if (req.files.length < 1) {

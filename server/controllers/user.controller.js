@@ -6,7 +6,6 @@ const bodyParser = require("body-parser");
 // a bug tester, potentially for routing
 const test = async function (req, res) {
     console.log(req);
-
     res.send({ message: "test" });
 }
 

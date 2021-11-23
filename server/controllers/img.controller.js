@@ -17,6 +17,8 @@ const uploadFiles = async function (req, res) {
 
         await upload(req, res);
 
+        console.log(req.body);
+
         if (req.files.length <= 0) {
             return res.status(400).send({
                 message: "You must select a file.",
