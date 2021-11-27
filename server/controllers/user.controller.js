@@ -1,6 +1,7 @@
 
 const User = require("../models/users.model");
 const bodyParser = require("body-parser");
+const bcrypt = require("bcryptjs");
 
 
 // a bug tester, potentially for routing
@@ -55,12 +56,13 @@ const createUser = async function(req, res) {
     // pass all validity and duplicate tests, now can insert the userdata to the database
     const user = new User({
         username: req.body.username,
-        password: req.body.password,
+        password: bcrypt.hashSync(password, 8)
     });
     await user.save()
         .then( data => {
-            console.log(`user ${data} created!`);
-            res.send(data);
+            res.status(200).send({
+                message: `User <${username}> created!`
+            });
         })
         .catch( err => {
             res.status(500).send({
@@ -93,7 +95,8 @@ const deleteUser = async function (req, res) {
     }
 
     let groundTruthPassword = findRes[0].password;
-    if (password !== groundTruthPassword) {
+    let passwordValid = bcrypt.compareSync(password, groundTruthPassword);
+    if (!passwordValid) {
         res.status(400).send({ message: "Must provide the right password!"});
         return;
     }
@@ -128,18 +131,31 @@ const updateUserPwd = async function (req, res) {
             message: `username <${username}> does not exist!`
         });
     }
-    if (findRes[0].password !== oldPwd) {   // wrong old password
+
+    let groundTruthPassword = findRes[0].password;
+    let passwordValid = bcrypt.compareSync(oldPwd, groundTruthPassword);
+    if (!passwordValid) {   // wrong old password
         return res.status(400).send({
             message: "Wrong old password!"
         });
     }
 
     // update the password
-    await User.findOneAndUpdate({ username: username}, { password: newPwd});
+    await User.findOneAndUpdate({ username: username}, { password: bcrypt.hashSync(newPwd, 8)});
     return res.status(200).send({
         message: `The password of user: ${username} has been changed!`
     });
 }
+
+
+// delete all users, ONLY for testing----------------------------
+const deleteAll = async function(req, res) {
+    User.deleteMany({})
+        .then(()=> {
+            res.status(200).send( { message: "All users deleted!" } );
+        });
+}
+
 
 
 const verifyUser = async function (req, res) {
@@ -182,5 +198,6 @@ module.exports = {
     inspectAllUser,
     updateUserPwd,
     deleteUser,
-    verifyUser
+    verifyUser,
+    deleteAll
 }

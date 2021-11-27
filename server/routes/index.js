@@ -18,22 +18,41 @@ let routes = function (app) {
     router.get("/", homeController.getHome);
 
 
-    // image uploading routing
-    router.get("/img/list", imgController.getListFiles);
+    /**
+     * **************************************************************
+     * File Uploading or Deleting routes
+     * **************************************************************
+     */
     router.post("/img/upload", imgController.uploadFiles);
     router.get("/img/retrieve/:name", imgController.download);
+    router.delete("/img/delete/:name", imgController.deleteOneImg);
+
+    // this two functions only for inner tests
+    router.get("/img/list", imgController.getListFiles);
     router.delete("/img/delete/all", imgController.deleteAllImg);
-    router.delete("/img/delete/:name", imgController.deleteOneImg)
 
 
+    /**
+     * **************************************************************
+     * User Account routes
+     * **************************************************************
+     */
     // user accounts manipulation routing
-    router.get("/user/test", userController.test);
     router.post("/user/create", userController.createUser);
-    router.get("/user/inspect", userController.inspectAllUser);
     router.post("/user/edit/", userController.updateUserPwd);
     router.delete("/user/delete", userController.deleteUser);
     router.post("/user/verify", userController.verifyUser);
 
+    router.get("/user/inspect", userController.inspectAllUser);
+    router.get("/user/test", userController.test);
+    router.delete("/user/delete/all", userController.deleteAll)
+
+
+    /**
+     * **************************************************************
+     * Post Account routes
+     * **************************************************************
+     */
     // post manipulation routing
     router.post("/post/test", postController.test);
     router.post("/post/create", postController.createPost);

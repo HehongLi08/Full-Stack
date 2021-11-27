@@ -1,7 +1,7 @@
 import './App.css';
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import FilesUploadComponent from "./components/files-upload-component";
+// import FilesUploadComponent from "./components/files-upload-component";
 // import axios from "axios";
 import http from "./http-common";
 import Config from "./config/config";
@@ -17,7 +17,9 @@ class App extends Component {
         this.titleInputUpdate = this.titleInputUpdate.bind(this);
         this.descriptionInputUpdate = this.descriptionInputUpdate.bind(this);
         this.priceInputUpdate = this.priceInputUpdate.bind(this);
-        this.fetchAllPosts = this.fetchAllPosts.bind(this);
+        this.fetchPostsByTitle = this.fetchPostsByTitle.bind(this);
+        this.searchInputUpdate = this.searchInputUpdate.bind(this);
+        this.testFunction = this.testFunction.bind(this);
         this.state = {
             posts: [],
             files: [],
@@ -25,7 +27,10 @@ class App extends Component {
             description: "",
             price: "",
             user: "",
-            posted: false
+            posted: false,
+            searchTitle: "",
+            hasError: false,
+            errorMsg: '',
         };
     }
 
@@ -63,8 +68,13 @@ class App extends Component {
         console.log(this.state);
     }
 
-    async submit(e) {
+    searchInputUpdate(e) {
+        this.setState({
+            searchTitle: e.target.value
+        });
+    }
 
+    async submit(e) {
         var formData = new FormData();
         formData.append("title", this.state.title);
         formData.append("description", this.state.description);
@@ -75,12 +85,19 @@ class App extends Component {
         });
         // formData.append("images", this.state.files);
         let fetchRes = await http.post("/post/create", formData, {});
-        // console.log(fetchRes);
-        await this.fetchAllPosts();
+
+        this.setState({
+            searchTitle: ""
+        });
+
+        console.log(fetchRes);
+        this.fetchPostsByTitle();
     }
 
-    async fetchAllPosts() {
-        http.get("/post/get/title")
+    fetchPostsByTitle() {
+        let query = "";
+        if (this.state.searchTitle !== "") query += "?title=" + this.state.searchTitle;
+        http.get("/post/get/title" + query)
             .then( response => {
                 this.setState({
                     posts: response.data.data
@@ -90,24 +107,37 @@ class App extends Component {
 
     componentDidMount() {
         console.log("testing front-end...");
-        http.get("/post/get/title")
-            .then( response => {
-                // console.log("-----------------------------");
-                // console.log(response);
-                this.setState({
-                    posts: response.data.data
-                });
-                // console.log("tag:   --------------");
-                // console.log(this.state);
-            });
+        this.fetchPostsByTitle();
     }
 
+
+    async testFunction() {
+        let formJSON = {
+            username: "cl224348@cornell.edu",
+            password: "mzxcnmcnm"
+        };
+        http.post("/user/create", formJSON)
+            .then((res) => {
+                this.setState({
+                    errorMsg: res.data.message,
+                    hasError: false
+                })
+                console.log(res);
+            })
+            .catch((error) => {
+                this.setState({
+                    errorMsg: error.response.data.message + ", please try again!",
+                    hasError: true
+                })
+                console.log(this.state);
+            });
+    }
 
 
     render() {
         // const { imgUrls } = this.state;
         // console.log(imgUrls);
-        const { posts } = this.state;
+        const { posts, errorMsg, hasError} = this.state;
         // console.log(this.state);
       return(
         <div className="App">
@@ -131,34 +161,50 @@ class App extends Component {
                 {/*</form>*/}
 
             </div>
+            <br/>
+            <br/>
+            {/*an input window for searching the title!*/}
+            <div>
+                Search Title: <input type="text" onChange={this.searchInputUpdate} className="input-group-lg input-search" />
+                <button className="btn-primary" onClick={this.fetchPostsByTitle}>
+                    Search
+                </button>
+                <br/>
+                <br/>
 
 
-
-
-
-
+                <button className="btn-primary" onClick={this.testFunction}>
+                    Test
+                </button>
+                {errorMsg && <span>{errorMsg}</span>}
+            </div>
 
 
             <div>
-                <ul className="list-group-item">
-                    {posts && posts.map( (p, i) => (
-                        <li>
-                            <h5>{"Title: " + p.title}</h5>
-                            <p>{"Price: " + p.price}</p>
-                            <p>{"Description: " + p.description}</p>
-                            <p>{"Seller: " + p.user}</p>
-                            {p.images && p.images.map( img => (
-                                <img src={Config.baseUrl + Config.imgGetRoute + img} alt={img} width="10%" />
-                            ))}
-                            <br/>
-                            -------------------------------------------------------
-                            <br/>
+                {posts.length === 0 ? (<p>No Content Found</p>) :
+                    (
+                        <ul className="list-group-item">
+                            {posts && posts.map( (p, i) => (
+                                <li>
+                                    <h5>{"Title: " + p.title}</h5>
+                                    <p>{"Price: " + p.price}</p>
+                                    <p>{"Description: " + p.description}</p>
+                                    <p>{"Seller: " + p.user}</p>
+                                    {p.images && p.images.map( img => (
+                                        <img src={Config.baseUrl + Config.imgGetRoute + img} alt={img} width="10%" />
+                                    ))}
+                                    <br/>
+                                    -------------------------------------------------------
+                                    <br/>
 
-                        </li>
-                    ))
-                    }
+                                </li>
+                            ))
+                            }
 
-                </ul>
+                        </ul>
+                    )
+                }
+
             </div>
 
         </div>

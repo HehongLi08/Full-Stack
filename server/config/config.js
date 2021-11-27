@@ -8,5 +8,9 @@ module.exports = {
     imgUploadFieldName: "images",
     maxImgCnt: 12,
 
-    corsUrl: "http://localhost:3000"
+    corsUrl: "http://localhost:3000",
+
+
+
+    secretKey: "ece5725",
 };
