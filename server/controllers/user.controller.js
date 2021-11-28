@@ -1,13 +1,20 @@
-
+const Config = require("../config/config");
 const User = require("../models/users.model");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const jwtMiddleware = require("../middleware/jwtVerify.middleware");
+
 
 
 // a bug tester, potentially for routing
 const test = async function (req, res) {
-    console.log(req);
-    res.send({ message: "test" });
+    try {
+        res.status(200).send( {message: "Token accepted!" });
+    }
+    catch (error) {
+        res.status(500).send({ message: error.message });
+    }
 }
 
 
@@ -22,53 +29,62 @@ const createUser = async function(req, res) {
      */
 
     // check if the body does not include a username of a password
-    if (!req.body.username) {
-        res.status(400).send({ message: "Must include a username!" });
-        return;
-    }
-    if (!req.body.password) {
-        res.status(400).send({ message: "Must include a password!" });
-        return;
-    }
+    try {
+        if (!req.body.username) {
+            res.status(400).send({ message: "Must include a username!" });
+            return;
+        }
+        if (!req.body.password) {
+            res.status(400).send({ message: "Must include a password!" });
+            return;
+        }
 
-    // check whether it is a valid cornell.edu email
-    let username = req.body.username, password = req.body.password;
-    let checkToken = "@cornell.edu";
-    let shortCut =  "sg6803@nyu.edu";
-    if (username.length < checkToken.length + 1) {
-        res.status(400).send({ message: "Not a valid Cornell email" });
-        return;
-    }
-    if (username.indexOf(checkToken) !== username.length - checkToken.length && username !== shortCut) {
-        res.status(400).send({ message: "Not a valid Cornell email" });
-        return;
-    }
+        // check whether it is a valid cornell.edu email
+        let username = req.body.username, password = req.body.password;
+        let checkToken = "@cornell.edu";
+        let shortCut =  "sg6803@nyu.edu";
+        if (username.length < checkToken.length + 1) {
+            res.status(400).send({ message: "Not a valid Cornell email" });
+            return;
+        }
+        if (username.indexOf(checkToken) !== username.length - checkToken.length && username !== shortCut) {
+            res.status(400).send({ message: "Not a valid Cornell email" });
+            return;
+        }
 
-    // check whether the the user has already been registered
-    let findRes = await User.find({username: req.body.username});
-    if (findRes.length > 0) {
-        res.status(400).send({
-            message: `username  <${req.body.username}>  already existed!`
-        })
-        return;
-    }
+        // check whether the the user has already been registered
+        let findRes = await User.find({username: req.body.username});
+        if (findRes.length > 0) {
+            res.status(400).send({
+                message: `username  <${req.body.username}>  already existed!`
+            })
+            return;
+        }
 
-    // pass all validity and duplicate tests, now can insert the userdata to the database
-    const user = new User({
-        username: req.body.username,
-        password: bcrypt.hashSync(password, 8)
-    });
-    await user.save()
-        .then( data => {
-            res.status(200).send({
-                message: `User <${username}> created!`
-            });
-        })
-        .catch( err => {
-            res.status(500).send({
-                message: err.message
-            });
+        // pass all validity and duplicate tests, now can insert the userdata to the database
+        const user = new User({
+            username: req.body.username,
+            password: bcrypt.hashSync(password, 8)
         });
+        await user.save()
+            .then( data => {
+                res.status(200).send({
+                    message: `User <${username}> created!`
+                });
+            })
+            .catch( err => {
+                res.status(500).send({
+                    message: err.message
+                });
+            });
+    }
+    catch (error) {
+        res.status(500).send({
+            message: error.message
+        });
+    }
+
+
 };
 
 
@@ -157,7 +173,47 @@ const deleteAll = async function(req, res) {
 }
 
 
+// login function of the account, send the jwt back to the frontend
+const loginUser = async function(req, res) {
+    try {
+        if (!req.body.username) return res.status(400).send({ message: "Must provide username!" });
+        if (!req.body.password) return res.status(400).send({ message: "Must provide username!" });
 
+        let username = req.body.username, password = req.body.password;
+        User.findOne({username: username})
+            .exec((err, user) => {
+                // error occurs when finding the user from the database
+                if (err) return res.status(500).send({ message: err.message });
+
+                // there is no associated user
+                if (!user) return res.status(404).send( { message: "User Not found." });
+
+                let passwordValid = bcrypt.compareSync(password, user.password);
+                if (!passwordValid) {
+                    return res.status(401).send({
+                        accessToken: null,
+                        message: "Invalid Password!"
+                    });
+                }
+
+                // return res.status(200).send( {data: user._id} );
+
+                // create a new token for this user
+                let token = jwt.sign({ id: user._id }, Config.secretKey, {expiresIn: Config.tokenValidPeriod} );
+                res.status(200).send({
+                    id: user._id,
+                    username: user.username,
+                    accessToken: token
+                });
+            });
+    }
+    catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+}
+
+
+// TODO: this function should be deleted, as we should use login
 const verifyUser = async function (req, res) {
     try {
         if (!req.body.username) {
@@ -171,8 +227,6 @@ const verifyUser = async function (req, res) {
         if (userFind.length < 1) {
             return res.status(400).send({ message: "User does not exist!" });
         }
-
-
     }
     catch (error) {
         res.status(500).send({ message: error });
@@ -199,5 +253,6 @@ module.exports = {
     updateUserPwd,
     deleteUser,
     verifyUser,
+    loginUser,
     deleteAll
 }

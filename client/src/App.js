@@ -1,216 +1,60 @@
 import './App.css';
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import {BrowserRouter as Router, Link, Route, Routes, Switch} from "react-router-dom";
 // import FilesUploadComponent from "./components/files-upload-component";
 // import axios from "axios";
 import http from "./http-common";
 import Config from "./config/config";
 
+import PostTestComponent from "./components/postTestPage";
+import UserTestComponent from "./components/userTestPage";
+
 
 
 class App extends Component {
+  render() {
 
-    constructor(props) {
-        super(props);
-        this.fileInputUpdate = this.fileInputUpdate.bind(this);
-        this.submit = this.submit.bind(this);
-        this.titleInputUpdate = this.titleInputUpdate.bind(this);
-        this.descriptionInputUpdate = this.descriptionInputUpdate.bind(this);
-        this.priceInputUpdate = this.priceInputUpdate.bind(this);
-        this.fetchPostsByTitle = this.fetchPostsByTitle.bind(this);
-        this.searchInputUpdate = this.searchInputUpdate.bind(this);
-        this.testFunction = this.testFunction.bind(this);
-        this.state = {
-            posts: [],
-            files: [],
-            title: "",
-            description: "",
-            price: "",
-            user: "",
-            posted: false,
-            searchTitle: "",
-            hasError: false,
-            errorMsg: '',
-        };
-    }
-
-
-    titleInputUpdate(e) {
-        this.setState({
-            title: e.target.value
-        });
-    }
-
-    descriptionInputUpdate(e) {
-        this.setState({
-            description: e.target.value
-        });
-    }
-
-    priceInputUpdate(e) {
-        this.setState({
-            price: e.target.value
-        });
-    }
-
-    userInputUpdate(e) {
-
-    }
-
-    fileInputUpdate(e) {
-        let fileDict = e.target.files;
-        let files = Object.values(fileDict);
-
-        this.setState({
-            files: files,
-            test: "test"
-        });
-        console.log(this.state);
-    }
-
-    searchInputUpdate(e) {
-        this.setState({
-            searchTitle: e.target.value
-        });
-    }
-
-    async submit(e) {
-        var formData = new FormData();
-        formData.append("title", this.state.title);
-        formData.append("description", this.state.description);
-        formData.append("price", this.state.price);
-        formData.append("user", "cl2228@cornell.edu");
-        this.state.files.forEach( i => {
-            formData.append("images", i);
-        });
-        // formData.append("images", this.state.files);
-        let fetchRes = await http.post("/post/create", formData, {});
-
-        this.setState({
-            searchTitle: ""
-        });
-
-        console.log(fetchRes);
-        this.fetchPostsByTitle();
-    }
-
-    fetchPostsByTitle() {
-        let query = "";
-        if (this.state.searchTitle !== "") query += "?title=" + this.state.searchTitle;
-        http.get("/post/get/title" + query)
-            .then( response => {
-                this.setState({
-                    posts: response.data.data
-                });
-            });
-    }
-
-    componentDidMount() {
-        console.log("testing front-end...");
-        this.fetchPostsByTitle();
-    }
-
-
-    async testFunction() {
-        let formJSON = {
-            username: "cl224348@cornell.edu",
-            password: "mzxcnmcnm"
-        };
-        http.post("/user/create", formJSON)
-            .then((res) => {
-                this.setState({
-                    errorMsg: res.data.message,
-                    hasError: false
-                })
-                console.log(res);
-            })
-            .catch((error) => {
-                this.setState({
-                    errorMsg: error.response.data.message + ", please try again!",
-                    hasError: true
-                })
-                console.log(this.state);
-            });
-    }
-
-
-    render() {
-        // const { imgUrls } = this.state;
-        // console.log(imgUrls);
-        const { posts, errorMsg, hasError} = this.state;
-        // console.log(this.state);
-      return(
+    return (
         <div className="App">
-            <h1>Testing page for Item posting and retrieving</h1>
-            {/*<FilesUploadComponent />*/}
-
-            <div className="upload-test">
-                {/*<form>*/}
-
-                    Title: <input type="text" onChange={this.titleInputUpdate} className="input-title"/>
-                    <br/>
-                    Description: <input type="text" onChange={this.descriptionInputUpdate} className="input-description"/>
-                    <br/>
-                    Price: <input type="text" onChange={this.priceInputUpdate} className="input-price"/>
-                    <br/>
-                    Photos: <input type="file" onChange={this.fileInputUpdate} multiple/>
-                    <br/>
-                    <button className="btn-primary" onClick={this.submit}>
-                        Upload
-                    </button>
-                {/*</form>*/}
-
-            </div>
-            <br/>
-            <br/>
-            {/*an input window for searching the title!*/}
-            <div>
-                Search Title: <input type="text" onChange={this.searchInputUpdate} className="input-group-lg input-search" />
-                <button className="btn-primary" onClick={this.fetchPostsByTitle}>
-                    Search
-                </button>
-                <br/>
-                <br/>
-
-
-                <button className="btn-primary" onClick={this.testFunction}>
-                    Test
-                </button>
-                {errorMsg && <span>{errorMsg}</span>}
+          <nav className="navbar navbar-expand navbar-dark bg-dark justify-content-center">
+            <div className="navbar-nav mr-auto">
+              <li className="nav-item">
+                <Link to="/" className="nav-link">Home</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="posts" className="nav-link">Posts</Link>
+              </li>
+              <li className="nav-item">
+                <Link to="about" className="nav-link">About</Link>
+              </li>
             </div>
 
 
-            <div>
-                {posts.length === 0 ? (<p>No Content Found</p>) :
-                    (
-                        <ul className="list-group-item">
-                            {posts && posts.map( (p, i) => (
-                                <li>
-                                    <h5>{"Title: " + p.title}</h5>
-                                    <p>{"Price: " + p.price}</p>
-                                    <p>{"Description: " + p.description}</p>
-                                    <p>{"Seller: " + p.user}</p>
-                                    {p.images && p.images.map( img => (
-                                        <img src={Config.baseUrl + Config.imgGetRoute + img} alt={img} width="10%" />
-                                    ))}
-                                    <br/>
-                                    -------------------------------------------------------
-                                    <br/>
-
-                                </li>
-                            ))
-                            }
-
-                        </ul>
-                    )
-                }
-
-            </div>
-
+          </nav>
+          <div className="main">
+            {/* Define all the routes */}
+            <Routes>
+              <Route path="/" element={<Home/>}/>
+              <Route path="posts" element={<PostTestComponent/>}/>
+              <Route path="about" element={<NotFound/>}/>
+            </Routes>
+          </div>
         </div>
-    );
+    )
   }
 
+
+}
+
+export const Home = () => {
+  return <div>You are in Home page</div>
+}
+export const About = () => {
+  return <div>This is the page where you put details about yourself</div>
+}
+export const NotFound = () => {
+  return <div>This is a 404 page</div>
 }
 
 

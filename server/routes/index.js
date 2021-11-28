@@ -7,6 +7,7 @@ const homeController = require("../controllers/home");
 const imgController = require("../controllers/img.controller");
 const userController = require("../controllers/user.controller");
 const postController = require("../controllers/post.contoller");
+const jwtMiddleware = require("../middleware/jwtVerify.middleware");
 const multer = require("multer");
 const path = require("path");
 
@@ -38,13 +39,14 @@ let routes = function (app) {
      * **************************************************************
      */
     // user accounts manipulation routing
-    router.post("/user/create", userController.createUser);
+    router.post("/user/signup", userController.createUser);
     router.post("/user/edit/", userController.updateUserPwd);
+    router.post("/user/login", userController.loginUser);
     router.delete("/user/delete", userController.deleteUser);
-    router.post("/user/verify", userController.verifyUser);
+    // router.post("/user/verify", userController.verifyUser);
 
     router.get("/user/inspect", userController.inspectAllUser);
-    router.get("/user/test", userController.test);
+    router.get("/user/test",jwtMiddleware.verifyToken, userController.test);
     router.delete("/user/delete/all", userController.deleteAll)
 
 
