@@ -1,6 +1,7 @@
 const imgBaseUrl = require("../config/config").imgBaseUrl;
 
 const Post = require("../models/posts.model");
+const User = require("../models/users.model");
 const imgUpload = require("../middleware/img.middleware");
 const imgController = require("../controllers/img.controller");
 const {ObjectId} = require("mongodb");
@@ -306,6 +307,38 @@ const deleteAll = async function(req, res) {
 }
 
 
+/**
+ * get a personal page, including this user's page and posts
+ * @param req
+ * @param res
+ * @returns {Promise<void>}
+ */
+const getPersonalPage = async function(req, res) {
+    try {
+        let userFind = await User.findOne({_id: req.userId});
+
+        if (!userFind) {
+            return res.status(404).send({
+                message: "User Not found!"
+            });
+        }
+
+        let username = userFind.username;
+        let postsFind = await Post.find({user: username});
+
+        return res.status(200).send({
+            user: userFind,
+            posts: postsFind
+        })
+    }
+    catch (error) {
+        return res.status(500).send({
+            message: error.message
+        });
+    }
+}
+
+
 //*******************************************************************************
 // export the module functions
 module.exports = {
@@ -315,6 +348,7 @@ module.exports = {
     getById,
     searchByTitle,
     updatePostById,
+    getPersonalPage,
     deleteById,
     deleteAll
 }

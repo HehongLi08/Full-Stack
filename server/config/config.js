@@ -13,5 +13,5 @@ module.exports = {
 
 
     secretKey: "ece5725",
-    tokenValidPeriod: 60,
+    tokenValidPeriod: 3600,
 };

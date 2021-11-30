@@ -1,30 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="8ae744a9-8e15-437a-b9bf-0009ca849346" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/postTestPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/userTestPage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/services/jwtHeader.services.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/services/post.services.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/services/user.services.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server/middleware/jwtVerify.middleware.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/login.component.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/http-common.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/postTestPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/postTestPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/user.services.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/user.services.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server/config/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/../server/config/config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server/controllers/post.contoller.js" beforeDir="false" afterPath="$PROJECT_DIR$/../server/controllers/post.contoller.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server/controllers/user.controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/../server/controllers/user.controller.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../server/node_modules/.package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../server/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../server/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../server/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../server/routes/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -40,7 +44,9 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -52,11 +58,22 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1638123208423</updated>
-      <workItem from="1638123212988" duration="54000" />
+      <workItem from="1638123212988" duration="24196000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

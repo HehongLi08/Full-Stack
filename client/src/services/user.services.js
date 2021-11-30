@@ -20,16 +20,12 @@ class UserServices {
             username : username,
             password : password
         }
-        http.post("/user/login", loginForm)
+        return http.post("/user/login", loginForm)
             .then((res) => {
                 if (res.data.accessToken) {
                     localStorage.setItem("user", JSON.stringify(res.data));
                 }
                 return res.data;
-            })
-            .catch((error) => {
-                localStorage.removeItem("user");
-                return error.response;
             });
     }
 
@@ -37,7 +33,7 @@ class UserServices {
      * logout, just delete the user information from the local storage
      */
     logout() {
-        if (localStorage.getItem("user")) console.log("tes");
+        localStorage.removeItem("user");
     }
 
     /**
@@ -47,9 +43,11 @@ class UserServices {
      * @returns {Promise<AxiosResponse<any>>}
      */
     signup(username, password) {
-        return http.post("/user/signup", {
-            username, password
-        });
+        let signupForm = {
+            username: username,
+            password: password
+        }
+        return http.post("/user/signup", signupForm);
     }
 
     /**

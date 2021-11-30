@@ -69,7 +69,8 @@ const createUser = async function(req, res) {
         await user.save()
             .then( data => {
                 res.status(200).send({
-                    message: `User <${username}> created!`
+                    message: `User <${username}> created!`,
+                    data: data
                 });
             })
             .catch( err => {
@@ -213,6 +214,7 @@ const loginUser = async function(req, res) {
 }
 
 
+
 // TODO: this function should be deleted, as we should use login
 const verifyUser = async function (req, res) {
     try {
@@ -241,6 +243,8 @@ const inspectAllUser = async function (req, res) {
         data: allUsers
     });
 }
+
+
 
 
 

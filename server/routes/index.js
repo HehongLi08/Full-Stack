@@ -10,6 +10,7 @@ const postController = require("../controllers/post.contoller");
 const jwtMiddleware = require("../middleware/jwtVerify.middleware");
 const multer = require("multer");
 const path = require("path");
+const {getPersonalPage} = require("../controllers/post.contoller");
 
 // const imgRoutes = require("./img.router");
 
@@ -64,6 +65,14 @@ let routes = function (app) {
     router.post("/post/update/:id", postController.updatePostById);
     router.delete("/post/delete/all", postController.deleteAll);
     router.delete("/post/delete/:id", postController.deleteById);
+
+
+    /**
+     * **************************************************************
+     * Page routes, used for route for different pages
+     * **************************************************************
+     */
+    router.get("/profile", jwtMiddleware.verifyToken, postController.getPersonalPage)
 
 
     return app.use("/", router);

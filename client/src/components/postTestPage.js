@@ -93,7 +93,7 @@ class PostTestComponent extends Component {
     fetchPostsByTitle() {
         PostServices.getPostsByTitle(this.state.searchTitle)
             .then( response => {
-                console.log(response);
+                // console.log(response);
                 this.setState({
                     posts: response.data.data
                 });
@@ -101,7 +101,7 @@ class PostTestComponent extends Component {
     }
 
     componentDidMount() {
-        console.log("testing front-end...");
+        // console.log("testing front-end...");
         this.fetchPostsByTitle();
     }
 
@@ -111,7 +111,7 @@ class PostTestComponent extends Component {
             username: "cl224348@cornell.edu",
             password: "mzxcnmcnm"
         };
-        UserServices.login("cl2228@cornell.edu", "mzxcnmcnm1");
+        await UserServices.login("cl2228@cornell.edu", "mzxcnmcnm1");
         // http.post("/user/signup", formJSON)
         //     .then((res) => {
         //         this.setState({
