@@ -4,11 +4,11 @@ module.exports = {
     url: "mongodb://localhost:27017/",
     database: "ece5725",
     imgBucket: "images",
-    imgBaseUrl: "http://192.168.1.104:8080/img/retrieve/",
+    imgBaseUrl: "http://localhost:8080/img/retrieve/",
     imgUploadFieldName: "images",
     maxImgCnt: 12,
 
-    corsUrl: "http://192.168.1.104:3000",
+    corsUrl: "http://localhost:3000",
 
 
 
