@@ -2,9 +2,10 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import {Component} from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate , Link} from "react-router-dom";
 
 import UserServices from "../services/user.services";
+import PostServices from "../services/post.services"
 import getJWTHeader from "../services/jwtHeader.services";
 import {Home} from "../App";
 import PostTestComponent from "./postTestPage";
@@ -25,6 +26,9 @@ class LoginComponent extends Component {
     constructor(props) {
         super(props);
 
+        this.logout = this.logout.bind(this);
+        this.fetchProfile = this.fetchProfile.bind(this);
+
         this.handleLogin = this.handleLogin.bind(this);
         this.onChangeLoginUsername = this.onChangeLoginUsername.bind(this);
         this.onChangeLoginPassword = this.onChangeLoginPassword.bind(this);
@@ -40,6 +44,8 @@ class LoginComponent extends Component {
             loginPassword: "",
             loginLoading: false,
             loginMessage: "",
+            loginUsernameEmpty: true,
+            loginPasswordEmpty: true,
 
             logged: false,
 
@@ -47,25 +53,52 @@ class LoginComponent extends Component {
             signupPassword: "",
             signupLoading: false,
             signupMessage: "",
+            signupUsernameEmpty: true,
+            signupPasswordEmpty: true,
 
             user: null,
             posts: []
         };
     }
 
+    logout() {
+        UserServices.logout();
+        window.location.reload();
+    }
+
     /********************************************************************
      * Log in functions
      ********************************************************************/
     onChangeLoginUsername(e) {
-        this.setState({
-            loginUsername: e.target.value
-        })
+        if (e.target.value) {
+            this.setState({
+                loginUsername: e.target.value,
+                loginUsernameEmpty: false,
+            });
+        }
+        else {
+            this.setState({
+                loginUsername: e.target.value,
+                loginUsernameEmpty: true,
+            });
+        }
+
     }
 
     onChangeLoginPassword(e) {
-        this.setState({
-            loginPassword: e.target.value
-        })
+        if (e.target.value) {
+            this.setState({
+                loginPassword: e.target.value,
+                loginPasswordEmpty: false,
+            });
+        }
+        else {
+            this.setState({
+                loginPassword: e.target.value,
+                loginPasswordEmpty: true,
+            })
+        }
+
     }
 
     handleLogin(e) {
@@ -76,25 +109,30 @@ class LoginComponent extends Component {
             loginLoading: true
         });
 
-        this.loginForm.validateAll();
-
-        if (this.loginCheckBtn.context._errors.length > 0) {
-            this.setState({
-                loginLoading: false
-            });
-            return;
-        }
+        // this.loginForm.validateAll();
+        //
+        // if (this.loginCheckBtn.context._errors.length > 0) {
+        //     this.setState({
+        //         loginLoading: false
+        //     });
+        //     return;
+        // }
 
         UserServices.login(this.state.loginUsername, this.state.loginPassword)
             .then( (res) => {
+                window.location.reload();
+
                 this.setState({
                     loginLoading: false,
                     loginMessage: "",
                     logged: true
                 });
+
+                this.fetchProfile();
             })
             .catch((error) => {
-                UserServices.logout();
+
+                // this.logout();
                 const errMsg =
                     (error.response &&
                         error.response.data &&
@@ -114,15 +152,33 @@ class LoginComponent extends Component {
      * Sign up functions
      ********************************************************************/
     onChangeSignupUsername(e) {
-        this.setState({
-            signupUsername: e.target.value,
-        });
+        if (e.target.value) {
+            this.setState({
+                signupUsername: e.target.value,
+                signupUsernameEmpty: false,
+            });
+        }
+        else {
+            this.setState({
+                signupUsername: e.target.value,
+                signupUsernameEmpty: true,
+            });
+        }
     }
 
     onChangeSignupPassword(e) {
-        this.setState({
-            signupPassword: e.target.value,
-        });
+        if (e.target.value) {
+            this.setState({
+                signupPassword: e.target.value,
+                signupPasswordEmpty: false,
+            });
+        }
+        else {
+            this.setState({
+                signupPassword: e.target.value,
+                signupPasswordEmpty: true,
+            });
+        }
     }
 
 
@@ -134,14 +190,14 @@ class LoginComponent extends Component {
             signupLoading: true
         });
 
-        this.signupForm.validateAll();
-
-        if (this.signupCheckBtn.context._errors.length > 0) {
-            this.setState({
-                signupLoading: false
-            });
-            return;
-        }
+        // this.signupForm.validateAll();
+        //
+        // if (this.signupCheckBtn.context._errors.length > 0) {
+        //     this.setState({
+        //         signupLoading: false
+        //     });
+        //     return;
+        // }
 
         UserServices.signup(this.state.signupUsername, this.state.signupPassword)
             .then((res) => {
@@ -151,14 +207,15 @@ class LoginComponent extends Component {
                 });
                 UserServices.login(this.state.signupUsername, this.state.signupPassword)
                     .then((res) => {
-                        this.setState({
-                            signupMessage: "",
-                            signupLoading: "",
-                            logged: true,
-                        });
+                        // this.setState({
+                        //     signupMessage: "",
+                        //     signupLoading: "",
+                        //     logged: true,
+                        // });
+                        window.location.reload();
                     })
                     .catch((error) => {
-                        UserServices.logout();
+                        // this.logout();
                         const errMsg =
                             (error.response &&
                                 error.response.data &&
@@ -192,22 +249,41 @@ class LoginComponent extends Component {
 
 
     /********************************************************************
-     * Sign up functions
+     * Fetch user data
      ********************************************************************/
 
     componentDidMount() {
         if (localStorage.getItem("user") === null) {
-            console.log("no user!");
             this.setState({
                 mainPageLoading: false,
-            })
-            return;
+                logged: false
+            });
         }
+        else {
+            this.setState({
+                mainPageLoading: false,
+                logged: true
+            });
+        }
+        this.fetchProfile();
+    }
 
-
-
-
-        // console.log(localStorage.user);
+    fetchProfile() {
+        PostServices.getProfilePage(getJWTHeader())
+            .then((res) => {
+                console.log(res);
+                this.setState({
+                    user: res.data.user,
+                    posts: res.data.posts
+                });
+                console.log(this.state);
+            })
+            .catch((error) => {
+                console.log(error.response);
+                this.setState({
+                    logged: false
+                })
+            })
     }
 
 
@@ -215,124 +291,124 @@ class LoginComponent extends Component {
         return (
 
             <div className="col-md-12">
-                {this.state.logged ? (<p>Successfully logged in</p>) : (<p>Please Log in</p>)}
-
-                {/*the form for login*/}
-                <div className="card card-container">
-                    <h5>Login</h5>
-                    <Form
-                        onSubmit={this.handleLogin}
-                        ref={c => {this.loginForm = c;}}
-                    >
-                        <div className="form-group">
-                            <label htmlFor="username">Username</label>
-                            <Input
-                                type="text"
-                                className="form-control"
-                                name="username"
-                                value={this.state.loginUsername}
-                                onChange={this.onChangeLoginUsername}
-                                validations={[required]}
-                            />
+                {this.state.logged ? (
+                    <div>
+                        <div>
+                            <p>Successfully logged in</p>
+                            <button onClick={this.logout}>Logout</button>
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="password">Password</label>
-                            <Input
-                                type="password"
-                                className="form-control"
-                                name="password"
-                                value={this.state.loginPassword}
-                                onChange={this.onChangeLoginPassword}
-                                validations={[required]}
-                            />
+                        <div className="card card-container">
+                            <p>haha</p>
                         </div>
-                        <div className="form-group">
-                            <button
-                                className="btn btn-primary btn-block"
-                                disabled={this.state.loginLoading}
-                            >
-                                {this.state.loginLoading && (
-                                    <span className="spinner-border spinner-border-sm"></span>
-                                )}
-                                <span>Log in</span>
-                            </button>
-                        </div>
-                        {this.state.loginMessage && (
-                            <div className="form-group">
-                                <div className="alert alert-danger" role="alert">
-                                    {this.state.loginMessage}
+                        <Link to={"/posts"}>post</Link>
+                    </div>
+                ) : (
+                    // a div that displays the login/signup page
+                    <div>
+                        <p>Please Log in</p>
+                        <div className="card card-container">
+                            <form onSubmit={this.handleLogin}>
+                                <h5>Log in</h5>
+                                <div className="form-group">
+                                    <label htmlFor="username">Username</label>
+                                    <input
+                                        type={"text"}
+                                        className="form-control"
+                                        name="loginUserName"
+                                        value={this.state.loginUsername}
+                                        onChange={this.onChangeLoginUsername}
+                                    />
                                 </div>
-                            </div>
-                        )}
-                        <CheckButton
-                            style={{ display: "none" }}
-                            ref={c => {this.loginCheckBtn = c;
-                            }}
-                        />
-                    </Form>
-                </div>
-
-
-                <label></label>
-                <div className="card card-container">
-                    <h5>Sign up</h5>
-                    <Form
-                        onSubmit={this.handleSignup}
-                        ref={c => {this.signupForm = c;}}
-                    >
-                        <div className="form-group">
-                            <label htmlFor="username">Username</label>
-                            <Input
-                                type="text"
-                                className="form-control"
-                                name="username"
-                                value={this.state.signupUsername}
-                                onChange={this.onChangeSignupUsername}
-                                validations={[required]}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="password">Password</label>
-                            <Input
-                                type="password"
-                                className="form-control"
-                                name="password"
-                                value={this.state.signupPassword}
-                                onChange={this.onChangeSignupPassword}
-                                validations={[required]}
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <button
-                                className="btn btn-primary btn-block"
-                                disabled={this.state.signupLoading}
-                            >
-                                {this.state.signupLoading && (
-                                    <span className="spinner-border spinner-border-sm"></span>
-                                )}
-                                <span>Sign up</span>
-                            </button>
-                        </div>
-
-                        {this.state.signupMessage && (
-                            <div className="form-group">
-                                <div className="alert alert-danger" role="alert">
-                                    {this.state.signupMessage}
+                                <div className="form-group">
+                                    <label htmlFor="username">Password</label>
+                                    <input
+                                        type={"password"}
+                                        className="form-control"
+                                        name="loginUserName"
+                                        value={this.state.loginPassword}
+                                        onChange={this.onChangeLoginPassword}
+                                    />
                                 </div>
-                            </div>
-                        )}
-                        <CheckButton
-                            style={{ display: "none" }}
-                            ref={c => {this.signupCheckBtn = c;
-                            }}
-                        />
-                    </Form>
-                </div>
-
+                                <button
+                                    className="btn btn-primary btn-block"
+                                    disabled={this.state.loginLoading ||
+                                    this.state.loginUsernameEmpty ||
+                                    this.state.loginPasswordEmpty}
+                                >
+                                    {this.state.loginLoading && (
+                                        <span className="spinner-border spinner-border-sm"></span>
+                                    )}
+                                    <span>Log in</span>
+                                </button>
+                                {this.state.loginMessage && (
+                                    <div className="form-group">
+                                        <div className="alert alert-danger" role="alert">
+                                            {this.state.loginMessage}
+                                        </div>
+                                    </div>
+                                )}
+                            </form>
+                        </div>
+                        <label></label>
+                        <div className="card card-container">
+                            <form onSubmit={this.handleSignup}>
+                                <h5>Sign up</h5>
+                                <div className="form-group">
+                                    <label htmlFor="username">Username</label>
+                                    <input
+                                        type={"text"}
+                                        className="form-control"
+                                        name="signupUsername"
+                                        value={this.state.signupUsername}
+                                        onChange={this.onChangeSignupUsername}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="password">Password</label>
+                                    <input
+                                        type={"password"}
+                                        className="form-control"
+                                        name="signupPassword"
+                                        value={this.state.signupPassword}
+                                        onChange={this.onChangeSignupPassword}
+                                    />
+                                </div>
+                                <button
+                                    className="btn btn-primary btn-block"
+                                    disabled={this.state.signupLoading ||
+                                    this.state.signupUsernameEmpty ||
+                                    this.state.signupPasswordEmpty}
+                                >
+                                    {this.state.signupLoading && (
+                                        <span className="spinner-border spinner-border-sm"></span>
+                                    )}
+                                    <span>Sign up</span>
+                                </button>
+                                {this.state.signupMessage && (
+                                    <div className="form-group">
+                                        <div className="alert alert-danger" role="alert">
+                                            {this.state.signupMessage}
+                                        </div>
+                                    </div>
+                                )}
+                            </form>
+                        </div>
+                    </div>
+                )}
             </div>
         )
     }
+}
+
+
+export const T1 = () => {
+    return <h1>T1</h1>
+}
+export const T2 = () => {
+    return <div>T2</div>
+}
+export const T3 = () => {
+    return <div>T3</div>
 }
 
 export default LoginComponent;

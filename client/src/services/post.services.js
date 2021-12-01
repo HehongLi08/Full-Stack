@@ -30,6 +30,10 @@ class PostServices {
     deletePostById(id) {
         return http.delete("/post/delete/" + id);
     }
+
+    getProfilePage(jwtHeader) {
+        return http.get("/profile", {headers: jwtHeader});
+    }
 }
 
 

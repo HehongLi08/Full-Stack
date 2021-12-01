@@ -178,7 +178,7 @@ const deleteAll = async function(req, res) {
 const loginUser = async function(req, res) {
     try {
         if (!req.body.username) return res.status(400).send({ message: "Must provide username!" });
-        if (!req.body.password) return res.status(400).send({ message: "Must provide username!" });
+        if (!req.body.password) return res.status(400).send({ message: "Must provide password!" });
 
         let username = req.body.username, password = req.body.password;
         User.findOne({username: username})
