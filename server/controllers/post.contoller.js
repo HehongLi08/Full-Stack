@@ -128,12 +128,10 @@ const getById = async function(req, res) {
             res.status(400).send({ message: "You must provide the ID of the post!" } );
         }
         // let testID = "619bac99cc93b6258ccb599f";
-        let findRes = await Post.find({ _id: req.params.id});
-        console.log(findRes);
+        let findRes = await Post.findOne({ _id: req.params.id});
 
-        if (findRes.length < 1) return res.status(400).send({ message: "No target post found!" });
+        if (!findRes) return res.status(400).send({ message: "No target post found!" });
         return res.status(200).send({
-            message: `${findRes.length} record(s) found!`,
             data: findRes
         });
     }
@@ -315,6 +313,7 @@ const deleteAll = async function(req, res) {
  */
 const getPersonalPage = async function(req, res) {
     try {
+
         let userFind = await User.findOne({_id: req.userId});
 
         if (!userFind) {
@@ -324,7 +323,7 @@ const getPersonalPage = async function(req, res) {
         }
 
         let username = userFind.username;
-        let postsFind = await Post.find({user: username});
+        let postsFind = await Post.find({user: username}).sort({updatedAt: -1} );;
 
         return res.status(200).send({
             user: userFind,

@@ -215,20 +215,19 @@ const loginUser = async function(req, res) {
 
 
 
-// TODO: this function should be deleted, as we should use login
+// verify the user token
 const verifyUser = async function (req, res) {
     try {
-        if (!req.body.username) {
-            return res.status(400).send({ message: "Must provide a username!" });
-        }
-        if (!req.body.password) {
-            return res.status(400).send({ message: "Must provide a password!" });
+
+
+        let userFind = await User.findOne({ _id: req.userId } );
+        if (!userFind) {
+            return res.status(404).send({ message: "User does not exist!" });
         }
 
-        let userFind = await User.find({ username: req.body.username } );
-        if (userFind.length < 1) {
-            return res.status(400).send({ message: "User does not exist!" });
-        }
+        return res.status(200).send({
+            user: userFind
+        });
     }
     catch (error) {
         res.status(500).send({ message: error });

@@ -59,6 +59,10 @@ class UserServices {
     }
 
 
+    verifyUser(jwtHeader) {
+        return http.post("/user/verify", {}, {headers: jwtHeader});
+    }
+
 }
 
 export default new UserServices();

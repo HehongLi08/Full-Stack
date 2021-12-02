@@ -1,14 +1,14 @@
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
+// import Form from "react-validation/build/form";
+// import Input from "react-validation/build/input";
+// import CheckButton from "react-validation/build/button";
 import {Component} from "react";
 import { useNavigate , Link} from "react-router-dom";
 
 import UserServices from "../services/user.services";
 import PostServices from "../services/post.services"
 import getJWTHeader from "../services/jwtHeader.services";
-import {Home} from "../App";
-import PostTestComponent from "./postTestPage";
+// import {Home} from "../App";
+// import PostTestComponent from "./postTestPage";
 
 const required = function(value) {
     if (!value) {
@@ -109,17 +109,10 @@ class LoginComponent extends Component {
             loginLoading: true
         });
 
-        // this.loginForm.validateAll();
-        //
-        // if (this.loginCheckBtn.context._errors.length > 0) {
-        //     this.setState({
-        //         loginLoading: false
-        //     });
-        //     return;
-        // }
 
         UserServices.login(this.state.loginUsername, this.state.loginPassword)
             .then( (res) => {
+                this.props.history.push("/profile");
                 window.location.reload();
 
                 this.setState({
@@ -138,8 +131,6 @@ class LoginComponent extends Component {
                         error.response.data &&
                         error.response.data.message) ||
                     error.message || error.toString();
-                console.log(errMsg);
-                console.log(error.response);
                 this.setState({
                     loginLoading: false,
                     loginMessage: errMsg
@@ -181,7 +172,6 @@ class LoginComponent extends Component {
         }
     }
 
-
     handleSignup(e) {
         e.preventDefault();
 
@@ -212,6 +202,7 @@ class LoginComponent extends Component {
                         //     signupLoading: "",
                         //     logged: true,
                         // });
+                        this.props.history.push("/profile");
                         window.location.reload();
                     })
                     .catch((error) => {
@@ -271,18 +262,15 @@ class LoginComponent extends Component {
     fetchProfile() {
         PostServices.getProfilePage(getJWTHeader())
             .then((res) => {
-                console.log(res);
                 this.setState({
                     user: res.data.user,
                     posts: res.data.posts
                 });
-                console.log(this.state);
             })
             .catch((error) => {
-                console.log(error.response);
                 this.setState({
                     logged: false
-                })
+                });
             })
     }
 

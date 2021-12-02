@@ -44,7 +44,7 @@ let routes = function (app) {
     router.post("/user/edit/", userController.updateUserPwd);
     router.post("/user/login", userController.loginUser);
     router.delete("/user/delete", userController.deleteUser);
-    // router.post("/user/verify", userController.verifyUser);
+    router.post("/user/verify",jwtMiddleware.verifyToken, userController.verifyUser);
 
     router.get("/user/inspect", userController.inspectAllUser);
     router.get("/user/test",jwtMiddleware.verifyToken, userController.test);
