@@ -256,11 +256,6 @@ class PostDetailComponent extends Component {
                                                 <p>{"Price: " + post.price}</p>
                                                 <p>{"Seller: " + post.user}</p>
                                                 <p>{"Last modified at: " + post.updatedAt}</p>
-                                                {post.images && post.images.map( img => (
-                                                    <img src={Config.baseUrl + Config.imgGetRoute + img} key={img} width="80%"/>
-                                                ))}
-
-
                                                 {owner && (
                                                     <div>
                                                         <button className="btn-outline-success" onClick={this.enterLoginMode}>
@@ -271,6 +266,12 @@ class PostDetailComponent extends Component {
                                                         </button>
                                                     </div>
                                                 )}
+                                                {post.images && post.images.map( img => (
+                                                    <img src={Config.baseUrl + Config.imgGetRoute + img} key={img} width="80%"/>
+                                                ))}
+
+
+
                                             </div>
                                         ) : (
                                             // edit mode here-----------------------------------------
