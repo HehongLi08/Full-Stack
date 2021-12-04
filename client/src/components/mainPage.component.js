@@ -51,9 +51,12 @@ class MainPageComponent extends Component {
         const { posts } = this.state;
         return (
             <div className="list row">
+                <div >
                     <h1>
                         Cornell Second-hand Trading
                     </h1>
+                </div>
+
 
                 <div className="align-content-center">
                     <form>

@@ -40,8 +40,8 @@ const createPost = async function(req, res) {
     try {
         await imgUpload(req, res);
 
-        console.log(req.files);
-        console.log(req.body);
+        // console.log(req.files);
+        // console.log(req.body);
 
         // if the user did not upload any images, should return the message that indicates the bad request
         if (req.files.length < 1) {
@@ -232,7 +232,7 @@ const updatePostById = async function(req, res) {
             images: imgUrls
         };
 
-        console.log(newVal);
+        // console.log(newVal);
 
         let updated = await Post.findOneAndUpdate({_id: req.params.id}, newVal, {new: true});
 

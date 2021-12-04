@@ -4,13 +4,33 @@ const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const jwtMiddleware = require("../middleware/jwtVerify.middleware");
-
+const nodemailer = require("nodemailer");
 
 
 // a bug tester, potentially for routing
 const test = async function (req, res) {
     try {
-        res.status(200).send( {message: "Token accepted!" });
+        console.log("haha, mail test called");
+
+
+        const transporter = nodemailer.createTransport(Config.mailSenderConfig);
+
+        const mailData = {
+            from: Config.mailSenderConfig.auth.user,
+            to: "cl2228@cornell.edu",
+            subject: "da baobei",
+            text: "hi \n gorgeous"
+        };
+
+        await transporter.sendMail(mailData, (error, info) => {
+            if (error) {
+                return res.status(404).send({err: error});
+            }
+            return res.status(200).send({
+                message: info
+            })
+        })
+        // res.status(200).send( {message: "Token accepted!" });
     }
     catch (error) {
         res.status(500).send({ message: error.message });
@@ -18,6 +38,11 @@ const test = async function (req, res) {
 }
 
 
+/**
+ * ***********************************************************************
+ * Signup Functions
+ * ***********************************************************************
+ */
 // create a new account------------------------------------------
 const createUser = async function(req, res) {
     /*
@@ -89,6 +114,191 @@ const createUser = async function(req, res) {
 };
 
 
+// send the verification code to the user's email, after
+const sendVerificationToEmail = async function(req,  res) {
+    try {
+        if (!req.body.username) {
+            return res.status(400).send({
+                message: "Must provide a username!"
+            });
+        }
+
+
+        // check if it is a valid cornell.edu email
+        let username = req.body.username;
+        let checkToken = Config.eduEmailCheckToken;
+        let shortCut = "sg6803@nyu.edu";
+        if (username.length < checkToken.length + 1) {
+            return res.status(400).send({ message: "Not a valid Cornell email" });
+        }
+        if (username.indexOf(checkToken) !== username.length - checkToken.length && username !== shortCut) {
+            return res.status(400).send({ message: "Not a valid Cornell email" });
+        }
+
+        let findRes = await User.find({username: username});
+        if (findRes.length > 0) {
+            return res.status(400).send({
+                message: `username  <${req.body.username}>  already existed!`
+            });
+        }
+
+        let token = jwt.sign({username: username}, Config.secretKey, {
+            expiresIn: Config.emailTokenValidPeriod });
+
+        const transporter = nodemailer.createTransport(Config.mailSenderConfig);
+
+        const mailData = {
+            from: Config.mailSenderConfig.auth.user,
+            to: username,
+            subject: Config.emailSubject,
+            text: Config.emailTextContent + token
+        }
+
+
+        await transporter.sendMail(mailData, (error, info) => {
+            // if (error) {
+            //     return res.status(404).send({
+            //         message: "Failed in sending verification code to your email"
+            //     });
+            // }
+            // return res.status(200).send( {
+            //     message: "The verification code has been sent to your email!"
+            // } );
+        })
+        return res.status(200).send( {
+            message: "The verification code has been sent to your email!"
+        } );
+
+    }
+    catch (error) {
+        res.status(500).send({
+            message: error.message
+        });
+    }
+}
+
+
+// verify the verification code that send to the user's email
+const signupVerify = async function(req, res) {
+    try {
+        if (!req.body.username) {
+            return res.status(400).send({ message: "Must include a username!" });
+        }
+        if (!req.body.password) {
+            return res.status(400).send({ message: "Must include a password!" });
+        }
+
+        // check whether it is a valid cornell.edu email
+        let username = req.body.username, password = req.body.password;
+
+        if (username !== req.username) {
+            return res.status(400).send({
+                message: "Wrong verification code!"
+            });
+        }
+
+        let findRes = await User.find({username: username});
+        if (findRes.length > 0) {
+            return res.status(400).send({
+                message: `username  <${username}>  already existed!`
+            });
+        }
+
+        // safe to create an account now
+        const user = new User({
+            username: username,
+            password: bcrypt.hashSync(password, 8),
+        });
+
+        await user.save()
+            .then( data => {
+                res.status(200).send({
+                    message: `User <${username}> created!`,
+                });
+            })
+            .catch( error => {
+                res.status(500).send({
+                    message: error.message,
+                });
+            });
+    }
+    catch (error) {
+        res.status(500).send({
+            message: error.message
+        });
+    }
+}
+
+/**
+ * ***********************************************************************
+ * Login Functions
+ * ***********************************************************************
+ */
+// login function of the account, send the jwt back to the frontend
+const loginUser = async function(req, res) {
+    try {
+        if (!req.body.username) return res.status(400).send({ message: "Must provide username!" });
+        if (!req.body.password) return res.status(400).send({ message: "Must provide password!" });
+
+        let username = req.body.username, password = req.body.password;
+        User.findOne({username: username})
+            .exec((err, user) => {
+                // error occurs when finding the user from the database
+                if (err) return res.status(500).send({ message: err.message });
+
+                // there is no associated user
+                if (!user) return res.status(404).send( { message: "User Not found." });
+
+                let passwordValid = bcrypt.compareSync(password, user.password);
+                if (!passwordValid) {
+                    return res.status(401).send({
+                        accessToken: null,
+                        message: "Invalid Password!"
+                    });
+                }
+
+                // return res.status(200).send( {data: user._id} );
+
+                // create a new token for this user
+                let token = jwt.sign({ id: user._id }, Config.secretKey, {expiresIn: Config.tokenValidPeriod} );
+                res.status(200).send({
+                    id: user._id,
+                    username: user.username,
+                    accessToken: token
+                });
+            });
+    }
+    catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+}
+
+
+// verify the user token for login, return the user information
+const verifyUser = async function (req, res) {
+    try {
+
+        let userFind = await User.findOne({ _id: req.userId } );
+        if (!userFind) {
+            return res.status(404).send({ message: "User does not exist!" });
+        }
+
+        return res.status(200).send({
+            user: userFind
+        });
+    }
+    catch (error) {
+        res.status(500).send({ message: error });
+    }
+}
+
+
+
+/**
+ * ***********************************************************************
+ * Other Functions
+ * ***********************************************************************
+ */
 // delete a existed account--------------------------------------
 const deleteUser = async function (req, res) {
     /*
@@ -174,66 +384,6 @@ const deleteAll = async function(req, res) {
 }
 
 
-// login function of the account, send the jwt back to the frontend
-const loginUser = async function(req, res) {
-    try {
-        if (!req.body.username) return res.status(400).send({ message: "Must provide username!" });
-        if (!req.body.password) return res.status(400).send({ message: "Must provide password!" });
-
-        let username = req.body.username, password = req.body.password;
-        User.findOne({username: username})
-            .exec((err, user) => {
-                // error occurs when finding the user from the database
-                if (err) return res.status(500).send({ message: err.message });
-
-                // there is no associated user
-                if (!user) return res.status(404).send( { message: "User Not found." });
-
-                let passwordValid = bcrypt.compareSync(password, user.password);
-                if (!passwordValid) {
-                    return res.status(401).send({
-                        accessToken: null,
-                        message: "Invalid Password!"
-                    });
-                }
-
-                // return res.status(200).send( {data: user._id} );
-
-                // create a new token for this user
-                let token = jwt.sign({ id: user._id }, Config.secretKey, {expiresIn: Config.tokenValidPeriod} );
-                res.status(200).send({
-                    id: user._id,
-                    username: user.username,
-                    accessToken: token
-                });
-            });
-    }
-    catch (error) {
-        res.status(500).send({ message: error.message });
-    }
-}
-
-
-
-// verify the user token
-const verifyUser = async function (req, res) {
-    try {
-
-
-        let userFind = await User.findOne({ _id: req.userId } );
-        if (!userFind) {
-            return res.status(404).send({ message: "User does not exist!" });
-        }
-
-        return res.status(200).send({
-            user: userFind
-        });
-    }
-    catch (error) {
-        res.status(500).send({ message: error });
-    }
-}
-
 
 // get all the user information, only for internal testing-------
 const inspectAllUser = async function (req, res) {
@@ -251,11 +401,20 @@ const inspectAllUser = async function (req, res) {
 
 module.exports = {
     test,
+
+    // sign up
     createUser,
+    sendVerificationToEmail,
+    signupVerify,
+
+    // log in
+    verifyUser,
+    loginUser,
+
     inspectAllUser,
     updateUserPwd,
     deleteUser,
-    verifyUser,
-    loginUser,
-    deleteAll
+    deleteAll,
+
+
 }

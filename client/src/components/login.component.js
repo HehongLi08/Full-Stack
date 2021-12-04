@@ -35,6 +35,8 @@ class LoginComponent extends Component {
 
         this.onChangeSignupUsername = this.onChangeSignupUsername.bind(this);
         this.onChangeSignupPassword = this.onChangeSignupPassword.bind(this);
+        this.onChangeSignupVeriCode = this.onChangeSignupVeriCode.bind(this);
+        this.handleSendVerificationCode = this.handleSendVerificationCode.bind(this);
         this.handleSignup = this.handleSignup.bind(this);
 
         this.state = {
@@ -51,10 +53,15 @@ class LoginComponent extends Component {
 
             signupUsername: "",
             signupPassword: "",
-            signupLoading: false,
             signupMessage: "",
+            signupVerificationCode: "",
+            signupVeriMsg: "",
             signupUsernameEmpty: true,
             signupPasswordEmpty: true,
+            signupVerificationCodeEmpty: true,
+            signupLoading: false,
+            signupSendVeriFrozen: false,
+
 
             user: null,
             posts: []
@@ -172,6 +179,55 @@ class LoginComponent extends Component {
         }
     }
 
+    onChangeSignupVeriCode(e) {
+        if (e.target.value) {
+            this.setState({
+                signupVerificationCode: e.target.value,
+                signupVerificationCodeEmpty: false,
+            });
+        }
+        else {
+            this.setState({
+                signupVerificationCode: e.target.value,
+                signupVerificationCodeEmpty: true,
+            });
+        }
+    }
+
+    handleSendVerificationCode(e) {
+        e.preventDefault();
+
+        this.setState({
+            signupMessage: "",
+            signupVeriMsg: "",
+            signupSendVeriFrozen: true
+        });
+
+        UserServices.sendVeriCode(this.state.signupUsername)
+            .then( res => {
+                this.setState({
+                    signupVeriMsg: res.data.message,
+                    signupSendVeriFrozen: false,
+                    signupMessage: "",
+                })
+            })
+            .catch( error => {
+
+                const errMsg =
+                    (error.response &&
+                        error.response.data &&
+                        error.response.data.message) ||
+                    error.message || error.toString();
+
+                this.setState({
+                    signupVeriMsg: "",
+                    signupSendVeriFrozen: false,
+                    signupMessage: errMsg
+                })
+            });
+
+    }
+
     handleSignup(e) {
         e.preventDefault();
 
@@ -189,8 +245,12 @@ class LoginComponent extends Component {
         //     return;
         // }
 
-        UserServices.signup(this.state.signupUsername, this.state.signupPassword)
+        UserServices.signup(this.state.signupUsername, this.state.signupPassword, this.state.signupVerificationCode)
             .then((res) => {
+
+                console.log(res);
+
+
                 this.setState({
                     user: res.data,
                     signupMessage: "",
@@ -279,110 +339,128 @@ class LoginComponent extends Component {
         return (
 
             <div className="col-md-12">
-                {this.state.logged ? (
-                    <div>
-                        <div>
-                            <p>Successfully logged in</p>
-                            <button onClick={this.logout}>Logout</button>
-                        </div>
-                        <div className="card card-container">
-                            <p>haha</p>
-                        </div>
-                        <Link to={"/posts"}>post</Link>
+                <div>
+                    <p>Please Log in</p>
+                    <div className="card card-container">
+                        <form onSubmit={this.handleLogin}>
+                            <h5>Log in</h5>
+                            <div className="form-group">
+                                <label htmlFor="username">Username</label>
+                                <input
+                                    type={"text"}
+                                    className="form-control"
+                                    name="loginUserName"
+                                    value={this.state.loginUsername}
+                                    onChange={this.onChangeLoginUsername}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="username">Password</label>
+                                <input
+                                    type={"password"}
+                                    className="form-control"
+                                    name="loginUserName"
+                                    value={this.state.loginPassword}
+                                    onChange={this.onChangeLoginPassword}
+                                />
+                            </div>
+                            <button
+                                className="btn btn-primary btn-block"
+                                disabled={this.state.loginLoading ||
+                                this.state.loginUsernameEmpty ||
+                                this.state.loginPasswordEmpty}
+                            >
+                                {this.state.loginLoading && (
+                                    <span className="spinner-border spinner-border-sm"></span>
+                                )}
+                                <span>Log in</span>
+                            </button>
+                            {this.state.loginMessage && (
+                                <div className="form-group">
+                                    <div className="alert alert-danger" role="alert">
+                                        {this.state.loginMessage}
+                                    </div>
+                                </div>
+                            )}
+                        </form>
                     </div>
-                ) : (
-                    // a div that displays the login/signup page
-                    <div>
-                        <p>Please Log in</p>
-                        <div className="card card-container">
-                            <form onSubmit={this.handleLogin}>
-                                <h5>Log in</h5>
-                                <div className="form-group">
-                                    <label htmlFor="username">Username</label>
-                                    <input
-                                        type={"text"}
-                                        className="form-control"
-                                        name="loginUserName"
-                                        value={this.state.loginUsername}
-                                        onChange={this.onChangeLoginUsername}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="username">Password</label>
-                                    <input
-                                        type={"password"}
-                                        className="form-control"
-                                        name="loginUserName"
-                                        value={this.state.loginPassword}
-                                        onChange={this.onChangeLoginPassword}
-                                    />
-                                </div>
-                                <button
-                                    className="btn btn-primary btn-block"
-                                    disabled={this.state.loginLoading ||
-                                    this.state.loginUsernameEmpty ||
-                                    this.state.loginPasswordEmpty}
-                                >
-                                    {this.state.loginLoading && (
-                                        <span className="spinner-border spinner-border-sm"></span>
-                                    )}
-                                    <span>Log in</span>
-                                </button>
-                                {this.state.loginMessage && (
+                    <label></label>
+                    <div className="card card-container">
+                        <form>
+                            <h5>Sign up</h5>
+                            <div className="form-group">
+                                <label htmlFor="username">Username</label>
+                                <input
+                                    type={"text"}
+                                    className="form-control"
+                                    name="signupUsername"
+                                    value={this.state.signupUsername}
+                                    onChange={this.onChangeSignupUsername}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="password">Password</label>
+                                <input
+                                    type={"password"}
+                                    className="form-control"
+                                    name="signupPassword"
+                                    value={this.state.signupPassword}
+                                    onChange={this.onChangeSignupPassword}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="verificationCode">Verification code</label>
+                                <input
+                                    type={"text"}
+                                    className="form-control"
+                                    name="signupVerificationCode"
+                                    value={this.state.signupVerificationCode}
+                                    onChange={this.onChangeSignupVeriCode}
+                                />
+                                {this.state.signupVeriMsg && (
                                     <div className="form-group">
-                                        <div className="alert alert-danger" role="alert">
-                                            {this.state.loginMessage}
+                                        <div className="alert-success" role="alert">
+                                            {this.state.signupVeriMsg}
                                         </div>
                                     </div>
                                 )}
-                            </form>
-                        </div>
-                        <label></label>
-                        <div className="card card-container">
-                            <form onSubmit={this.handleSignup}>
-                                <h5>Sign up</h5>
-                                <div className="form-group">
-                                    <label htmlFor="username">Username</label>
-                                    <input
-                                        type={"text"}
-                                        className="form-control"
-                                        name="signupUsername"
-                                        value={this.state.signupUsername}
-                                        onChange={this.onChangeSignupUsername}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="password">Password</label>
-                                    <input
-                                        type={"password"}
-                                        className="form-control"
-                                        name="signupPassword"
-                                        value={this.state.signupPassword}
-                                        onChange={this.onChangeSignupPassword}
-                                    />
-                                </div>
                                 <button
-                                    className="btn btn-primary btn-block"
+                                    className="btn-sm"
                                     disabled={this.state.signupLoading ||
                                     this.state.signupUsernameEmpty ||
-                                    this.state.signupPasswordEmpty}
+                                    this.state.signupSendVeriFrozen }
+                                    onClick={this.handleSendVerificationCode}
                                 >
-                                    {this.state.signupLoading && (
+                                    {this.state.signupSendVeriFrozen && (
                                         <span className="spinner-border spinner-border-sm"></span>
                                     )}
-                                    <span>Sign up</span>
+                                    <span>Get Verification Code</span>
                                 </button>
-                                {this.state.signupMessage && (
-                                    <div className="form-group">
-                                        <div className="alert alert-danger" role="alert">
-                                            {this.state.signupMessage}
-                                        </div>
-                                    </div>
+                            </div>
+                            <button
+                                className="btn btn-primary btn-block"
+                                disabled={this.state.signupLoading ||
+                                this.state.signupUsernameEmpty ||
+                                this.state.signupPasswordEmpty ||
+                                this.state.signupVerificationCodeEmpty}
+                                onClick={this.handleSignup}
+                            >
+                                {this.state.signupLoading && (
+                                    <span className="spinner-border spinner-border-sm"></span>
                                 )}
-                            </form>
-                        </div>
+                                <span>Sign up</span>
+                            </button>
+                            {this.state.signupMessage && (
+                                <div className="form-group">
+                                    <div className="alert alert-danger" role="alert">
+                                        {this.state.signupMessage}
+                                    </div>
+                                </div>
+                            )}
+                        </form>
                     </div>
-                )}
+                </div>
+
             </div>
         )
     }

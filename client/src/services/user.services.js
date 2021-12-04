@@ -40,15 +40,28 @@ class UserServices {
      * register a new user
      * @param username
      * @param password
+     * @param token
      * @returns {Promise<AxiosResponse<any>>}
      */
-    signup(username, password) {
+    signup(username, password, token) {
         let signupForm = {
             username: username,
             password: password
         }
-        return http.post("/user/signup", signupForm);
+        let jwtHeader = {
+            'x-access-token': token
+        }
+        return http.post("/user/signup/verify", signupForm, {headers: jwtHeader});
     }
+
+
+    sendVeriCode(username) {
+        let sendForm = {
+            username: username,
+        }
+        return http.post("/user/signup/send", sendForm);
+    }
+
 
     /**
      * get the current user
