@@ -112,8 +112,8 @@ class ProfileComponent extends Component {
                                                 <Link to={"/post/" + p._id}>
                                                     <h5>{p.title}</h5>
                                                 </Link>
-                                                <label>{"Description: " + p.description}</label>
-                                                <label>{"Last updated: " + p.updatedAt}</label>
+                                                <p>{"Description: " + p.description}</p>
+                                                <p>{"Last updated: " + p.updatedAt}</p>
                                                 {p.images && p.images.map(img => (
                                                     <img src={Config.baseUrl + Config.imgGetRoute + img} alt={img} width="50%"/>
                                                 ))}
