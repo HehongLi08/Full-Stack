@@ -18,8 +18,8 @@ const test = async function (req, res) {
         const mailData = {
             from: Config.mailSenderConfig.auth.user,
             to: "cl2228@cornell.edu",
-            subject: "da baobei",
-            text: "hi \n gorgeous"
+            subject: "this is a test",
+            text: "a test"
         };
 
         await transporter.sendMail(mailData, (error, info) => {

@@ -33,17 +33,32 @@ module.exports = {
         "please copy and paste ALL of them to the input box: \n\n\n",
 
     // nodemailer sender account configuration------
+    // mailSenderConfig: {
+    //     host: "smtp-mail.outlook.com",
+    //     secureConnection: false,
+    //     // service: 'outlook',
+    //     port: 587,
+    //     tls: {
+    //         ciphers: 'SSLv3'
+    //     },
+    //     auth: {
+    //         user: "ece5725-cl2228@outlook.com",
+    //         pass: "mzxcnmcnm2228"
+    //     },
+    // },
+
+
+
     mailSenderConfig: {
-        host: "smtp-mail.outlook.com",
-        secureConnection: false,
-        // service: 'outlook',
-        port: 587,
-        tls: {
-            ciphers: 'SSLv3'
-        },
+        host: "smtp-mail.yahoo.com",
+        service: 'yahoo',
+        port: 465,
+        secure: false,
         auth: {
-            user: "ece5725-cl2228@outlook.com",
-            pass: "mzxcnmcnm2228"
+            user: "ece5725.cl2228@yahoo.com",
+            pass: "rhlemnckvwjtyhnn"
         },
-    }
+        debug: false,
+        logger: false,          // only for debug
+    },
 };

@@ -226,20 +226,9 @@ class LoginComponent extends Component {
             signupLoading: true
         });
 
-        // this.signupForm.validateAll();
-        //
-        // if (this.signupCheckBtn.context._errors.length > 0) {
-        //     this.setState({
-        //         signupLoading: false
-        //     });
-        //     return;
-        // }
 
         UserServices.signup(this.state.signupUsername, this.state.signupPassword, this.state.signupVerificationCode)
             .then((res) => {
-
-                console.log(res);
-
 
                 this.setState({
                     user: res.data,
@@ -247,13 +236,16 @@ class LoginComponent extends Component {
                 });
                 UserServices.login(this.state.signupUsername, this.state.signupPassword)
                     .then((res) => {
-                        // this.setState({
-                        //     signupMessage: "",
-                        //     signupLoading: "",
-                        //     logged: true,
-                        // });
+                        this.setState({
+                            signupMessage: "",
+                            signupLoading: "",
+                            logged: true,
+                        });
                         this.props.history.push("/profile");
-                        window.location.reload();
+                        UtilsServices.sleep(500)
+                            .then(() => {
+                                window.location.reload();
+                            });
                     })
                     .catch((error) => {
                         // this.logout();
@@ -283,7 +275,6 @@ class LoginComponent extends Component {
                     logged: false,
                     user: null
                 });
-                console.log(this.state);
             });
     }
 
