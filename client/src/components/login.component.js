@@ -105,21 +105,23 @@ class LoginComponent extends Component {
 
         UserServices.login(this.state.loginUsername, this.state.loginPassword)
             .then( (res) => {
-                UtilsServices.sleep(2000)
-                    .then(() => {
-                        console.log("awake!");
-                    })
-
-                console.log("call reload");
-
                 this.setState({
                     loginLoading: false,
                     loginMessage: "",
                     logged: true
                 });
 
-                // this.props.history.push("/profile");
-                // window.location.reload();
+                UtilsServices.sleep(2000)
+                    .then(() => {
+                        console.log("awake!");
+                        this.props.history.push("/profile");
+                        window.location.reload();
+                    });
+
+
+
+
+
 
 
 
