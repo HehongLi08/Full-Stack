@@ -110,12 +110,12 @@ class ProfileComponent extends Component {
                                         <div>
                                             <div className="card-container" key={p._id}>
                                                 <Link to={"/post/" + p._id}>
-                                                    {p.title}
+                                                    <h5>{p.title}</h5>
                                                 </Link>
                                                 <label>{"Description: " + p.description}</label>
                                                 <label>{"Last updated: " + p.updatedAt}</label>
                                                 {p.images && p.images.map(img => (
-                                                    <img src={Config.baseUrl + Config.imgGetRoute + img} alt={img}/>
+                                                    <img src={Config.baseUrl + Config.imgGetRoute + img} alt={img} width="50%"/>
                                                 ))}
                                             </div>
                                             <p></p>
