@@ -78,7 +78,6 @@ class ProfileComponent extends Component {
 
     componentDidMount() {
         console.log("reached profile page, token:");
-        console.log(localStorage);
         console.log(getJWTHeader());
         this.loadProfile()
 
