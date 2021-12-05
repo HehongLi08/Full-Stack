@@ -328,7 +328,7 @@ class LoginComponent extends Component {
                 <div>
                     <p>Please Log in</p>
                     <div className="card card-container">
-                        <form onSubmit={this.handleLogin}>
+                        <form>
                             <h5>Log in</h5>
                             <div className="form-group">
                                 <label htmlFor="username">Username</label>
@@ -355,6 +355,7 @@ class LoginComponent extends Component {
                                 disabled={this.state.loginLoading ||
                                 this.state.loginUsernameEmpty ||
                                 this.state.loginPasswordEmpty}
+                                onClick={this.handleLogin}
                             >
                                 {this.state.loginLoading && (
                                     <span className="spinner-border spinner-border-sm"></span>

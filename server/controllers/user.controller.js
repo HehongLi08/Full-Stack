@@ -156,14 +156,12 @@ const signupSendCode = async function(req,  res) {
 
 
         await transporter.sendMail(mailData, (error, info) => {
-            // if (error) {
-            //     return res.status(404).send({
-            //         message: "Failed in sending verification code to your email"
-            //     });
-            // }
-            // return res.status(200).send( {
-            //     message: "The verification code has been sent to your email!"
-            // } );
+            if (error) {
+                console.log(error)
+            }
+            else {
+                console.log(info);
+            }
         })
         return res.status(200).send( {
             message: "The verification code has been sent to your email!"

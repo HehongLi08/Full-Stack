@@ -19,7 +19,7 @@ module.exports = {
 
     // sign up configuration------------------------
     eduEmailCheckToken: "@cornell.edu",
-    emailTokenValidPeriod: 600,
+    emailTokenValidPeriod: 3600,
     signupEmailSubject: "Hi there! Here is your verification code for Cornell Second-hand Trading!",
     signupEmailTextContent: "Dear Cornellian, thank you for registering an account at our website, " +
         "here is your token (verification code), and it will expire in 10 minutes, " +
@@ -36,6 +36,7 @@ module.exports = {
     mailSenderConfig: {
         host: "smtp-mail.outlook.com",
         secureConnection: false,
+        // service: 'outlook',
         port: 587,
         tls: {
             ciphers: 'SSLv3'
