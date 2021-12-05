@@ -108,7 +108,7 @@ class ProfileComponent extends Component {
                                     </Link>
                                     {posts && posts.map( p => (
                                         <div>
-                                            <div className="card card-container" key={p._id}>
+                                            <div className="card-container" key={p._id}>
                                                 <Link to={"/post/" + p._id}>
                                                     {p.title}
                                                 </Link>
