@@ -106,7 +106,7 @@ class LoginComponent extends Component {
         UserServices.login(this.state.loginUsername, this.state.loginPassword)
             .then( (res) => {
 
-                console.log(localStorage);
+                console.log("call reload");
 
                 this.setState({
                     loginLoading: false,

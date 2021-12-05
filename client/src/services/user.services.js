@@ -25,6 +25,10 @@ class UserServices {
                 if (res.data.accessToken) {
                     localStorage.setItem("user", JSON.stringify(res.data));
                 }
+
+                console.log("getToken:");
+                console.log(res.data);
+
                 return res.data;
             });
     }
