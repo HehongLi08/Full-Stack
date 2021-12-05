@@ -43,8 +43,9 @@ class ProfileComponent extends Component {
     }
 
     loadProfile() {
-        return PostServices.getProfilePage(getJWTHeader())
+        PostServices.getProfilePage(getJWTHeader())
             .then((res) => {
+                console.log("success");
                 this.setState({
                     logged: true,
                     user: res.data.user,
@@ -54,6 +55,7 @@ class ProfileComponent extends Component {
                 });
             })
             .catch((error) => {
+                console.log(error.response);
                 // const errMsg =
                 //     (error.response &&
                 //         error.response.data &&
@@ -75,8 +77,8 @@ class ProfileComponent extends Component {
         console.log("reached profile page, token:");
         console.log(localStorage);
         console.log(getJWTHeader());
-        // this.loadProfile()
-        //     .then();
+        this.loadProfile()
+
     }
 
     render() {
