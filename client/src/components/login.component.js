@@ -111,7 +111,7 @@ class LoginComponent extends Component {
                     logged: true
                 });
 
-                // this.props.history.push("/profile");
+                this.props.history.push("/profile");
                 window.location.reload();
 
 
