@@ -112,7 +112,7 @@ class LoginComponent extends Component {
                 });
 
                 // this.props.history.push("/profile");
-                // window.location.reload();
+                window.location.reload();
 
 
 
