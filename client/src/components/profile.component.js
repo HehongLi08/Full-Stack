@@ -61,7 +61,9 @@ class ProfileComponent extends Component {
                 //         error.response.data &&
                 //         error.response.data.message) ||
                 //     error.message || error.toString();
-                this.logout();
+
+
+                // this.logout();
                 this.setState({
                     loading: false,
                     user: undefined,
