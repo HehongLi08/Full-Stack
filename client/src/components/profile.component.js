@@ -33,8 +33,8 @@ class ProfileComponent extends Component {
 
     logout() {
         UserServices.logout();
-        this.props.history.push("/login");
-        window.location.reload();
+        // this.props.history.push("/login");
+        // window.location.reload();
     }
 
     // verify the existing token, check whether it is valid, if not, log out automatically
