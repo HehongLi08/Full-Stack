@@ -72,7 +72,8 @@ class ProfileComponent extends Component {
 
 
     componentDidMount() {
-        console.log("reached profile page");
+        console.log("reached profile page, token:");
+        console.log(getJWTHeader());
         this.loadProfile()
             .then();
     }
