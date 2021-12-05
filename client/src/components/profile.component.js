@@ -72,6 +72,7 @@ class ProfileComponent extends Component {
 
 
     componentDidMount() {
+        console.log("reached profile page");
         this.loadProfile()
             .then();
     }
