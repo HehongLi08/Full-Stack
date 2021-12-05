@@ -111,17 +111,14 @@ class LoginComponent extends Component {
                     logged: true
                 });
 
-                UtilsServices.sleep(2000)
+
+                console.log(localStorage);
+                console.log("awake!");
+                this.props.history.push("/profile");
+                UtilsServices.sleep(500)
                     .then(() => {
-                        console.log(localStorage);
-                        console.log("awake!");
-                        this.props.history.push("/profile");
-                        UtilsServices.sleep(500)
-                            .then(() => {
-                                window.location.reload();
-                            })
-                    });
-                // this.fetchProfile();
+                        window.location.reload();
+                    })
             })
             .catch((error) => {
 
