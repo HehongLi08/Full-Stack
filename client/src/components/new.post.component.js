@@ -1,9 +1,9 @@
 import { Component } from "react";
-import {Link, useParams} from "react-router-dom";
+import {Link} from "react-router-dom";
 import UserServices from "../services/user.services";
 import PostServices from "../services/post.services";
 import getJWTHeader from "../services/jwtHeader.services";
-import Config from "../config/config";
+// import Config from "../config/config";
 
 
 class NewPostComponent extends Component {
@@ -49,14 +49,7 @@ class NewPostComponent extends Component {
                 });
             })
             .catch((error) => {
-                const errMsg =
-                    (error.response &&
-                        error.response.data &&
-                        error.response.data.message) ||
-                    error.message || error.toString();
-
                 this.logout();
-
                 this.setState({
                     user: undefined,
                     errMsg: "Please Log in (again)",
@@ -158,7 +151,7 @@ class NewPostComponent extends Component {
     }
 
     render() {
-        const {loading, logged, posted, user, errMsg, imgPreviewUrls} = this.state;
+        const {loading, logged, posted, errMsg, imgPreviewUrls} = this.state;
 
         return (
             <div className="main-div">
@@ -193,7 +186,7 @@ class NewPostComponent extends Component {
                                                 </div>
                                             )}
                                             {imgPreviewUrls && imgPreviewUrls.map( (srcUrl) => (
-                                                <img src={srcUrl} width="40%"/>
+                                                <img src={srcUrl} width="40%" alt={srcUrl}/>
                                             ))}
 
                                         </div>

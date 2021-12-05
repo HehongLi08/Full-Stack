@@ -45,7 +45,6 @@ class ProfileComponent extends Component {
     loadProfile() {
         return PostServices.getProfilePage(getJWTHeader())
             .then((res) => {
-                console.log(res);
                 this.setState({
                     logged: true,
                     user: res.data.user,
@@ -53,7 +52,6 @@ class ProfileComponent extends Component {
                     loading: false,
                     errMsg: ""
                 });
-                console.log(this.state);
             })
             .catch((error) => {
                 // const errMsg =
@@ -110,7 +108,7 @@ class ProfileComponent extends Component {
                                                 <label>{"Description: " + p.description}</label>
                                                 <label>{"Last updated: " + p.updatedAt}</label>
                                                 {p.images && p.images.map(img => (
-                                                    <img src={Config.baseUrl + Config.imgGetRoute + img}/>
+                                                    <img src={Config.baseUrl + Config.imgGetRoute + img} alt={img}/>
                                                 ))}
                                             </div>
                                             <p></p>

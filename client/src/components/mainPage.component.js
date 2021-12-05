@@ -1,6 +1,6 @@
 import { Component } from "react";
 import Config from "../config/config";
-import UserServices from "../services/user.services";
+// import UserServices from "../services/user.services";
 import PostServices from "../services/post.services";
 import {Link} from "react-router-dom";
 
@@ -33,7 +33,6 @@ class MainPageComponent extends Component {
                 this.setState({
                     posts: response.data.data
                 });
-                console.log(this.state.posts);
             });
     }
 
@@ -69,7 +68,6 @@ class MainPageComponent extends Component {
                             Search
                         </button>
                     </form>
-
                 </div>
 
 
@@ -77,7 +75,7 @@ class MainPageComponent extends Component {
                     {posts.length !== 0 ? (
                         <div>
                             {posts && posts.map( (p, i) => (
-                                <div className="card-container">
+                                <div className="card-container" key={p._id}>
                                     <Link to={/post/ + p._id}>
                                         <div className="card-header">
                                             {"Title: " + p.title}
@@ -88,7 +86,7 @@ class MainPageComponent extends Component {
                                         {"Price: " + p.price}
                                     </div>
                                     {p.images && p.images.map( img => (
-                                        <img src={Config.baseUrl + Config.imgGetRoute + img} alt={img} width="10%" />
+                                        <img src={Config.baseUrl + Config.imgGetRoute + img} alt={img} width="10%" key={img} />
                                     ))}
                                 </div>
                             ))}

@@ -4,13 +4,13 @@ module.exports = {
     url: "mongodb://localhost:27017/",
     database: "ece5725",
     imgBucket: "images",
-    imgBaseUrl: "http://localhost:8080/img/retrieve/",
+    imgBaseUrl: "http://192.168.1.101:8080/img/retrieve/",
     imgUploadFieldName: "images",
     maxImgCnt: 12,
 
 
     // CORS configuration---------------------------
-    corsUrl: "http://localhost:3000",
+    corsUrl: "http://192.168.1.101:3000",
 
 
     // JWT configuration----------------------------
@@ -19,11 +19,18 @@ module.exports = {
 
     // sign up configuration------------------------
     eduEmailCheckToken: "@cornell.edu",
-    emailTokenValidPeriod: 3600,
-    emailSubject: "Hi there! Here is your verification code for Cornell Second-hand Trading!",
-    emailTextContent: "Dear Cornellian, thank you for registering an account at our website, " +
-        "here is your token (verification code), please copy and paste ALL of them to the input box: \n\n\n",
+    emailTokenValidPeriod: 600,
+    signupEmailSubject: "Hi there! Here is your verification code for Cornell Second-hand Trading!",
+    signupEmailTextContent: "Dear Cornellian, thank you for registering an account at our website, " +
+        "here is your token (verification code), and it will expire in 10 minutes, " +
+        "please copy and paste ALL of them to the input box: \n\n\n",
 
+
+    // retrieve configuration-----------------------
+    retrieveEmailSubject: "Hi, you are resetting your password at Cornell Second-hand Trading",
+    retrieveEmailContent: "Dear Cornellian, you are retrieving your account at our website, " +
+        "here is your token (verification code), and it will expire in 10 minutes, " +
+        "please copy and paste ALL of them to the input box: \n\n\n",
 
     // nodemailer sender account configuration------
     mailSenderConfig: {
@@ -34,8 +41,8 @@ module.exports = {
             ciphers: 'SSLv3'
         },
         auth: {
-            user: "g20170284@outlook.com",
-            pass: "-deviL0284"
+            user: "ece5725-cl2228@outlook.com",
+            pass: "mzxcnmcnm2228"
         },
     }
 };

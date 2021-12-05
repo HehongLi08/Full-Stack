@@ -115,7 +115,7 @@ const createUser = async function(req, res) {
 
 
 // send the verification code to the user's email, after
-const sendVerificationToEmail = async function(req,  res) {
+const signupSendCode = async function(req,  res) {
     try {
         if (!req.body.username) {
             return res.status(400).send({
@@ -150,8 +150,8 @@ const sendVerificationToEmail = async function(req,  res) {
         const mailData = {
             from: Config.mailSenderConfig.auth.user,
             to: username,
-            subject: Config.emailSubject,
-            text: Config.emailTextContent + token
+            subject: Config.signupEmailSubject,
+            text: Config.signupEmailTextContent + token
         }
 
 
@@ -193,7 +193,7 @@ const signupVerify = async function(req, res) {
 
         if (username !== req.username) {
             return res.status(400).send({
-                message: "Wrong verification code!"
+                message: "Invalid verification code!"
             });
         }
 
@@ -275,7 +275,7 @@ const loginUser = async function(req, res) {
 
 
 // verify the user token for login, return the user information
-const verifyUser = async function (req, res) {
+const verifyUser = async function(req, res) {
     try {
 
         let userFind = await User.findOne({ _id: req.userId } );
@@ -292,6 +292,87 @@ const verifyUser = async function (req, res) {
     }
 }
 
+
+/**
+ * ***********************************************************************
+ * Retrieve Functions
+ * ***********************************************************************
+ */
+const retrieveSendCode = async function(req, res) {
+    try {
+        if (!req.body.username) {
+            return res.status(400).send({
+                message: "Must provide a username!"
+            });
+        }
+
+        let username = req.body.username;
+        let findRes = await User.find({username: username});
+        if (findRes.length < 1) return res.status(404).send( { message: "User Not Found." });
+
+        let token = jwt.sign({username: username}, Config.secretKey, {
+            expiresIn: Config.emailTokenValidPeriod });
+
+        const transporter = nodemailer.createTransport(Config.mailSenderConfig);
+
+        const mailData = {
+            from: Config.mailSenderConfig.auth.user,
+            to: username,
+            subject: Config.retrieveEmailSubject,
+            text: Config.retrieveEmailContent + token
+        }
+
+
+        await transporter.sendMail(mailData, (error, info) => {
+            // if (error) {
+            //     console.log(error);
+            // }
+            // else {
+            //     console.log(info);
+            // }
+        })
+        return res.status(200).send( {
+            message: "The verification code has been sent to your email!"
+        } );
+
+    }
+    catch (error) {
+        return res.status(500).send({
+            message: error.message
+        });
+    }
+}
+
+
+const retrieveResetPassword = async function(req, res) {
+    try {
+        if (!req.body.username) {
+            return res.status(400).send({ message: "Must include a username!" });
+        }
+        if (!req.body.password) {
+            return res.status(400).send({ message: "Must include a password!" });
+        }
+
+        // check whether it is a valid cornell.edu email
+        let username = req.body.username, password = req.body.password;
+
+        if (username !== req.username) {
+            return res.status(400).send({
+                message: "Invalid verification code!"
+            });
+        }
+
+        await User.findOneAndUpdate({username: username}, {password: bcrypt.hashSync(password, 8)});
+
+        return res.status(200).send({
+            message: "Your password has been reset!",
+        });
+
+    }
+    catch (error) {
+        return res.status(500).send({message: error.message});
+    }
+}
 
 
 /**
@@ -404,12 +485,16 @@ module.exports = {
 
     // sign up
     createUser,
-    sendVerificationToEmail,
+    signupSendCode,
     signupVerify,
 
     // log in
     verifyUser,
     loginUser,
+
+    // retrieve
+    retrieveSendCode,
+    retrieveResetPassword,
 
     inspectAllUser,
     updateUserPwd,

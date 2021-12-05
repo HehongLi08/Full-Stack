@@ -1,24 +1,11 @@
-// import Form from "react-validation/build/form";
-// import Input from "react-validation/build/input";
-// import CheckButton from "react-validation/build/button";
-import {Component} from "react";
-import { useNavigate , Link} from "react-router-dom";
+import { Component } from "react";
 
 import UserServices from "../services/user.services";
 import PostServices from "../services/post.services"
 import getJWTHeader from "../services/jwtHeader.services";
-// import {Home} from "../App";
-// import PostTestComponent from "./postTestPage";
+import {Link} from "react-router-dom";
 
-const required = function(value) {
-    if (!value) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                This field is required!
-            </div>
-        );
-    }
-}
+
 
 
 class LoginComponent extends Component {
@@ -61,7 +48,6 @@ class LoginComponent extends Component {
             signupVerificationCodeEmpty: true,
             signupLoading: false,
             signupSendVeriFrozen: false,
-
 
             user: null,
             posts: []
@@ -203,7 +189,7 @@ class LoginComponent extends Component {
             signupSendVeriFrozen: true
         });
 
-        UserServices.sendVeriCode(this.state.signupUsername)
+        UserServices.signupSendVeriCode(this.state.signupUsername)
             .then( res => {
                 this.setState({
                     signupVeriMsg: res.data.message,
@@ -375,6 +361,13 @@ class LoginComponent extends Component {
                                 )}
                                 <span>Log in</span>
                             </button>
+                            <Link to="/account/retrieve">
+                                <button
+                                    className="btn btn-outline-secondary"
+                                >
+                                    Forgot password
+                                </button>
+                            </Link>
                             {this.state.loginMessage && (
                                 <div className="form-group">
                                     <div className="alert alert-danger" role="alert">

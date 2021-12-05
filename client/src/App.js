@@ -1,16 +1,15 @@
 import './App.css';
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {BrowserRouter as Router, Link, Route, Switch} from "react-router-dom";
-import Config from "./config/config";
+import {Link, Route, Switch} from "react-router-dom";
+// import Config from "./config/config";
 
-import PostTestComponent from "./components/postTestPage";
-import UserTestComponent from "./components/userTestPage";
 import LoginComponent from "./components/login.component";
 import MainPageComponent from "./components/mainPage.component";
 import PostDetailComponent from "./components/post.detail.component";
 import ProfileComponent from "./components/profile.component";
 import NewPostComponent from "./components/new.post.component";
+import RetrieveAccountComponent from "./components/retrieveAccount.component";
 
 import UserServices from "./services/user.services";
 import PostServices from "./services/post.services";
@@ -114,6 +113,11 @@ class App extends Component {
                   </li>
               )}
 
+
+              {/*<li className="nav-item">*/}
+              {/*  <Link to="/account/retrieve" className="nav-link">Retrieve</Link>*/}
+              {/*</li>*/}
+
             </div>
 
           </nav>
@@ -124,11 +128,11 @@ class App extends Component {
             {/* Define all the routes */}
             <Switch>
               <Route exact path="/" component={MainPageComponent} />
-              <Route path="/posts" component={PostTestComponent} />
               <Route path="/login" component={LoginComponent} />
               <Route path="/post/:id" component={PostDetailComponent} />
               <Route path="/profile" component={ProfileComponent} />
               <Route path="/newpost" component={NewPostComponent} />
+              <Route path="/account/retrieve" component={RetrieveAccountComponent} />
             </Switch>
           </div>
         </div>

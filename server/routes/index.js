@@ -41,14 +41,17 @@ let routes = function (app) {
      */
     // user accounts manipulation routing
     router.post("/user/signup", userController.createUser);
-    router.post("/user/signup/send", userController.sendVerificationToEmail);
+    router.post("/user/signup/send", userController.signupSendCode);
     router.post("/user/signup/verify", jwtMiddleware.verifyEmailToken, userController.signupVerify)
 
-    router.post("/user/edit/", userController.updateUserPwd);
     router.post("/user/login", userController.loginUser);
-    router.delete("/user/delete", userController.deleteUser);
-    router.post("/user/verify",jwtMiddleware.verifyToken, userController.verifyUser);
+    router.post("/user/verify", jwtMiddleware.verifyToken, userController.verifyUser);
 
+    router.post("/user/retrieve/send", userController.retrieveSendCode);
+    router.post("/user/retrieve/reset", jwtMiddleware.verifyEmailToken, userController.retrieveResetPassword);
+
+    router.delete("/user/delete", userController.deleteUser);
+    router.post("/user/edit/", userController.updateUserPwd);
     router.get("/user/inspect", userController.inspectAllUser);
     router.post("/user/test", userController.test);
     router.delete("/user/delete/all", userController.deleteAll)

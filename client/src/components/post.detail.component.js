@@ -1,5 +1,5 @@
 import { Component } from "react";
-import {Link, useParams} from "react-router-dom";
+import {Link} from "react-router-dom";
 import UserServices from "../services/user.services";
 import PostServices from "../services/post.services";
 import getJWTHeader from "../services/jwtHeader.services";
@@ -59,12 +59,6 @@ class PostDetailComponent extends Component {
                 });
             })
             .catch((error) => {
-                const errMsg =
-                    (error.response &&
-                        error.response.data &&
-                        error.response.data.message) ||
-                    error.message || error.toString();
-
                 this.logout();
 
                 this.setState({
@@ -267,7 +261,7 @@ class PostDetailComponent extends Component {
                                                     </div>
                                                 )}
                                                 {post.images && post.images.map( img => (
-                                                    <img src={Config.baseUrl + Config.imgGetRoute + img} key={img} width="80%"/>
+                                                    <img src={Config.baseUrl + Config.imgGetRoute + img} key={img} width="80%" alt={img}/>
                                                 ))}
 
 
@@ -301,7 +295,7 @@ class PostDetailComponent extends Component {
                                                         </div>
                                                     )}
                                                     {imgPreviewUrls && imgPreviewUrls.map( (srcUrl) => (
-                                                        <img src={srcUrl} width="40%"/>
+                                                        <img src={srcUrl} width="40%" alt={srcUrl} />
                                                     ))}
 
                                                 </div>

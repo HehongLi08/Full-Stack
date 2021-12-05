@@ -36,13 +36,18 @@ class UserServices {
         localStorage.removeItem("user");
     }
 
-    /**
-     * register a new user
-     * @param username
-     * @param password
-     * @param token
-     * @returns {Promise<AxiosResponse<any>>}
-     */
+
+
+    // step 1 of registering, sending a code to email
+    signupSendVeriCode(username) {
+        let sendForm = {
+            username: username,
+        }
+        return http.post("/user/signup/send", sendForm);
+    }
+
+
+    // step 2 of registering
     signup(username, password, token) {
         let signupForm = {
             username: username,
@@ -51,22 +56,32 @@ class UserServices {
         let jwtHeader = {
             'x-access-token': token
         }
-        return http.post("/user/signup/verify", signupForm, {headers: jwtHeader});
+        return http.post("/user/signup/verify", signupForm, { headers: jwtHeader });
     }
 
 
-    sendVeriCode(username) {
+
+
+    retrieveSendCode(username) {
         let sendForm = {
             username: username,
         }
-        return http.post("/user/signup/send", sendForm);
+        return http.post("/user/retrieve/send", sendForm);
+    }
+
+    retrieveReset(username, password, token) {
+        let signupForm = {
+            username: username,
+            password: password
+        }
+        let jwtHeader = {
+            'x-access-token': token
+        }
+        return http.post("/user/retrieve/reset", signupForm, { headers: jwtHeader });
     }
 
 
-    /**
-     * get the current user
-     * @returns {any}
-     */
+
     getCurrUser() {
         return JSON.parse(localStorage.getItem("user"));
     }
