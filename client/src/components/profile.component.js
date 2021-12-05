@@ -56,7 +56,7 @@ class ProfileComponent extends Component {
             })
             .catch((error) => {
                 console.log("error:");
-                console.log(error.response);
+                console.log(error);
                 // const errMsg =
                 //     (error.response &&
                 //         error.response.data &&
