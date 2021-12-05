@@ -113,6 +113,7 @@ class LoginComponent extends Component {
 
                 UtilsServices.sleep(2000)
                     .then(() => {
+                        console.log(localStorage);
                         console.log("awake!");
                         // this.props.history.push("/profile");
                         // window.location.reload();
