@@ -115,7 +115,7 @@ class LoginComponent extends Component {
                     .then(() => {
                         console.log(localStorage);
                         console.log("awake!");
-                        // this.props.history.push("/profile");
+                        this.props.history.push("/");
                         window.location.reload();
                     });
 
