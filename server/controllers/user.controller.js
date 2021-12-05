@@ -275,7 +275,6 @@ const loginUser = async function(req, res) {
 // verify the user token for login, return the user information
 const verifyUser = async function(req, res) {
     try {
-
         let userFind = await User.findOne({ _id: req.userId } );
         if (!userFind) {
             return res.status(404).send({ message: "User does not exist!" });

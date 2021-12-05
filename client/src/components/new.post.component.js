@@ -120,7 +120,6 @@ class NewPostComponent extends Component {
                     posted: true,
                     errMsg: "",
                 })
-
             })
             .catch((error) => {
                 const errMsg =

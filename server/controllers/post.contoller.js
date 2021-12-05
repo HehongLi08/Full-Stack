@@ -36,7 +36,6 @@ const deleteNewlyUploadedImages = async function(files) {
 
 // create a post----------------------------------------------------
 const createPost = async function(req, res) {
-    console.log("create called");
     try {
         await imgUpload(req, res);
 
