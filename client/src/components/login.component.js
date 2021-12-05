@@ -105,14 +105,16 @@ class LoginComponent extends Component {
 
         UserServices.login(this.state.loginUsername, this.state.loginPassword)
             .then( (res) => {
-                this.props.history.push("/profile");
-                window.location.reload();
-
                 this.setState({
                     loginLoading: false,
                     loginMessage: "",
                     logged: true
                 });
+
+                this.props.history.push("/profile");
+                window.location.reload();
+
+
 
                 this.fetchProfile();
             })
@@ -325,135 +327,143 @@ class LoginComponent extends Component {
         return (
 
             <div className="col-md-12">
-                <div>
-                    <p>Please Log in</p>
-                    <div className="card card-container">
-                        <form>
-                            <h5>Log in</h5>
-                            <div className="form-group">
-                                <label htmlFor="username">Username</label>
-                                <input
-                                    type={"text"}
-                                    className="form-control"
-                                    name="loginUserName"
-                                    value={this.state.loginUsername}
-                                    onChange={this.onChangeLoginUsername}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="username">Password</label>
-                                <input
-                                    type={"password"}
-                                    className="form-control"
-                                    name="loginUserName"
-                                    value={this.state.loginPassword}
-                                    onChange={this.onChangeLoginPassword}
-                                />
-                            </div>
-                            <button
-                                className="btn btn-primary btn-block"
-                                disabled={this.state.loginLoading ||
-                                this.state.loginUsernameEmpty ||
-                                this.state.loginPasswordEmpty}
-                                onClick={this.handleLogin}
-                            >
-                                {this.state.loginLoading && (
-                                    <span className="spinner-border spinner-border-sm"></span>
-                                )}
-                                <span>Log in</span>
-                            </button>
-                            <Link to="/account/retrieve">
-                                <button
-                                    className="btn btn-outline-secondary"
-                                >
-                                    Forgot password
-                                </button>
-                            </Link>
-                            {this.state.loginMessage && (
-                                <div className="form-group">
-                                    <div className="alert alert-danger" role="alert">
-                                        {this.state.loginMessage}
-                                    </div>
-                                </div>
-                            )}
-                        </form>
+                {this.state.logged ? (
+                    <div>
+                        <h1>logged in</h1>
                     </div>
-                    <label></label>
-                    <div className="card card-container">
-                        <form>
-                            <h5>Sign up</h5>
-                            <div className="form-group">
-                                <label htmlFor="username">Username</label>
-                                <input
-                                    type={"text"}
-                                    className="form-control"
-                                    name="signupUsername"
-                                    value={this.state.signupUsername}
-                                    onChange={this.onChangeSignupUsername}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="password">Password</label>
-                                <input
-                                    type={"password"}
-                                    className="form-control"
-                                    name="signupPassword"
-                                    value={this.state.signupPassword}
-                                    onChange={this.onChangeSignupPassword}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="verificationCode">Verification code</label>
-                                <input
-                                    type={"text"}
-                                    className="form-control"
-                                    name="signupVerificationCode"
-                                    value={this.state.signupVerificationCode}
-                                    onChange={this.onChangeSignupVeriCode}
-                                />
-                                {this.state.signupVeriMsg && (
+                ) : (
+                    <div>
+                        <p>Please Log in</p>
+                        <div className="card card-container">
+                            <form>
+                                <h5>Log in</h5>
+                                <div className="form-group">
+                                    <label htmlFor="username">Username</label>
+                                    <input
+                                        type={"text"}
+                                        className="form-control"
+                                        name="loginUserName"
+                                        value={this.state.loginUsername}
+                                        onChange={this.onChangeLoginUsername}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="username">Password</label>
+                                    <input
+                                        type={"password"}
+                                        className="form-control"
+                                        name="loginUserName"
+                                        value={this.state.loginPassword}
+                                        onChange={this.onChangeLoginPassword}
+                                    />
+                                </div>
+                                <button
+                                    className="btn btn-primary btn-block"
+                                    disabled={this.state.loginLoading ||
+                                    this.state.loginUsernameEmpty ||
+                                    this.state.loginPasswordEmpty}
+                                    onClick={this.handleLogin}
+                                >
+                                    {this.state.loginLoading && (
+                                        <span className="spinner-border spinner-border-sm"></span>
+                                    )}
+                                    <span>Log in</span>
+                                </button>
+                                <Link to="/account/retrieve">
+                                    <button
+                                        className="btn btn-outline-secondary"
+                                    >
+                                        Forgot password
+                                    </button>
+                                </Link>
+                                {this.state.loginMessage && (
                                     <div className="form-group">
-                                        <div className="alert-success" role="alert">
-                                            {this.state.signupVeriMsg}
+                                        <div className="alert alert-danger" role="alert">
+                                            {this.state.loginMessage}
                                         </div>
                                     </div>
                                 )}
+                            </form>
+                        </div>
+                        <label></label>
+                        <div className="card card-container">
+                            <form>
+                                <h5>Sign up</h5>
+                                <div className="form-group">
+                                    <label htmlFor="username">Username</label>
+                                    <input
+                                        type={"text"}
+                                        className="form-control"
+                                        name="signupUsername"
+                                        value={this.state.signupUsername}
+                                        onChange={this.onChangeSignupUsername}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="password">Password</label>
+                                    <input
+                                        type={"password"}
+                                        className="form-control"
+                                        name="signupPassword"
+                                        value={this.state.signupPassword}
+                                        onChange={this.onChangeSignupPassword}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="verificationCode">Verification code</label>
+                                    <input
+                                        type={"text"}
+                                        className="form-control"
+                                        name="signupVerificationCode"
+                                        value={this.state.signupVerificationCode}
+                                        onChange={this.onChangeSignupVeriCode}
+                                    />
+                                    {this.state.signupVeriMsg && (
+                                        <div className="form-group">
+                                            <div className="alert-success" role="alert">
+                                                {this.state.signupVeriMsg}
+                                            </div>
+                                        </div>
+                                    )}
+                                    <button
+                                        className="btn-sm"
+                                        disabled={this.state.signupLoading ||
+                                        this.state.signupUsernameEmpty ||
+                                        this.state.signupSendVeriFrozen }
+                                        onClick={this.handleSendVerificationCode}
+                                    >
+                                        {this.state.signupSendVeriFrozen && (
+                                            <span className="spinner-border spinner-border-sm"></span>
+                                        )}
+                                        <span>Get Verification Code</span>
+                                    </button>
+                                </div>
                                 <button
-                                    className="btn-sm"
+                                    className="btn btn-primary btn-block"
                                     disabled={this.state.signupLoading ||
                                     this.state.signupUsernameEmpty ||
-                                    this.state.signupSendVeriFrozen }
-                                    onClick={this.handleSendVerificationCode}
+                                    this.state.signupPasswordEmpty ||
+                                    this.state.signupVerificationCodeEmpty}
+                                    onClick={this.handleSignup}
                                 >
-                                    {this.state.signupSendVeriFrozen && (
+                                    {this.state.signupLoading && (
                                         <span className="spinner-border spinner-border-sm"></span>
                                     )}
-                                    <span>Get Verification Code</span>
+                                    <span>Sign up</span>
                                 </button>
-                            </div>
-                            <button
-                                className="btn btn-primary btn-block"
-                                disabled={this.state.signupLoading ||
-                                this.state.signupUsernameEmpty ||
-                                this.state.signupPasswordEmpty ||
-                                this.state.signupVerificationCodeEmpty}
-                                onClick={this.handleSignup}
-                            >
-                                {this.state.signupLoading && (
-                                    <span className="spinner-border spinner-border-sm"></span>
-                                )}
-                                <span>Sign up</span>
-                            </button>
-                            {this.state.signupMessage && (
-                                <div className="form-group">
-                                    <div className="alert alert-danger" role="alert">
-                                        {this.state.signupMessage}
+                                {this.state.signupMessage && (
+                                    <div className="form-group">
+                                        <div className="alert alert-danger" role="alert">
+                                            {this.state.signupMessage}
+                                        </div>
                                     </div>
-                                </div>
-                            )}
-                        </form>
+                                )}
+                            </form>
+                        </div>
                     </div>
-                </div>
+                )}
+
+
 
             </div>
         )
