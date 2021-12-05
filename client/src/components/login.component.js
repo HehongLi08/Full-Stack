@@ -1,10 +1,10 @@
 import { Component } from "react";
 
 import UserServices from "../services/user.services";
-import PostServices from "../services/post.services"
+import PostServices from "../services/post.services";
+import UtilsServices from "../services/utils.services";
 import getJWTHeader from "../services/jwtHeader.services";
 import {Link} from "react-router-dom";
-
 
 
 
@@ -105,6 +105,10 @@ class LoginComponent extends Component {
 
         UserServices.login(this.state.loginUsername, this.state.loginPassword)
             .then( (res) => {
+                UtilsServices.sleep(2000)
+                    .then(() => {
+                        console.log("awake!");
+                    })
 
                 console.log("call reload");
 
