@@ -336,7 +336,7 @@ class LoginComponent extends Component {
             <div className="col-md-12">
                 {this.state.logged ? (
                     <div>
-                        <h1>logged in</h1>
+                        <h3>logged in, redirecting you to your profile...</h3>
                     </div>
                 ) : (
                     <div>
