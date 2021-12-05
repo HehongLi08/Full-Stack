@@ -325,15 +325,12 @@ const getPersonalPage = async function(req, res) {
         let username = userFind.username;
         let postsFind = await Post.find({user: username}).sort({updatedAt: -1} );;
 
-        console.log("getDone!");
-
         return res.status(200).send({
             user: userFind,
             posts: postsFind
         })
     }
     catch (error) {
-        console.log("error: " + error);
         return res.status(500).send({
             message: error.message
         });
