@@ -95,7 +95,7 @@ class ProfileComponent extends Component {
                         {logged ? (
                             // logged in successfully--------------------------
                             <div>
-                                <div className="card card-container">
+                                <div className="card-container">
                                     <span>{"Username: " + user.username}</span>
                                     <span>{"ID: " + user._id}</span>
                                     <button className="btn-primary" onClick={this.logout}>Log out</button>
