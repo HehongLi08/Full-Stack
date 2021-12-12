@@ -1,6 +1,7 @@
 import {Component} from "react";
 import { Link } from "react-router-dom";
 import UserServices from "../services/user.services";
+import {Col, FormControl, InputGroup} from "react-bootstrap";
 
 
 class RetrieveAccountComponent extends Component {
@@ -124,10 +125,34 @@ class RetrieveAccountComponent extends Component {
         return (
             <div>
                 {!submitted ? (
-                    <div className="card-container">
-                        <h4>Reset your password</h4>
 
+                    <div className="justify-content-md-center">
+                            <div className="" style={{width: "30%", left: "50%" }}>
+                                <form>
+                                    <InputGroup className="mb-lg-3">
+                                        <InputGroup.Text>
+                                            Username
+                                        </InputGroup.Text>
+                                        <FormControl
+                                            placeholder="NetID@cornell.edu"
+                                            onChange={this.onChangeUsername}
+                                            value={this.state.username}
+                                        />
+                                    </InputGroup>
+                                </form>
+                            </div>
                         <form>
+                            <InputGroup className="mb-lg-3">
+                                <InputGroup.Text>
+                                    Username
+                                </InputGroup.Text>
+                                <FormControl
+                                    placeholder="NetID@cornell.edu"
+                                    onChange={this.onChangeUsername}
+                                    value={this.state.username}
+                                />
+                            </InputGroup>
+
                             <div>
                                 <label>Username: </label>
                                 <input
@@ -191,6 +216,8 @@ class RetrieveAccountComponent extends Component {
 
 
                         </form>
+                        <h4>Reset your password</h4>
+
                     </div>
                 ) : (
                     <div className="container-sm">

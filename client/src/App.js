@@ -2,6 +2,7 @@ import './App.css';
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {Link, Route, Switch} from "react-router-dom";
+import Container from 'react-bootstrap/Container'
 // import Config from "./config/config";
 
 import LoginComponent from "./components/login.component";
@@ -14,6 +15,7 @@ import RetrieveAccountComponent from "./components/retrieveAccount.component";
 import UserServices from "./services/user.services";
 import PostServices from "./services/post.services";
 import getJWTHeader from "./services/jwtHeader.services";
+import {Col, Image, Row} from "react-bootstrap";
 
 
 
@@ -74,6 +76,19 @@ class App extends Component {
     const { currUser } = this.state;
     return (
         <div className="App">
+          <Container fluid="md">
+              <Row>
+                  <Col lg="4">
+                      <Image src="./cornell-logo.png" width="20%" fluid/>
+                  </Col>
+                  <Col lg="8"><h1>Cornell Second-hand Mall</h1></Col>
+              </Row>
+
+
+          </Container>
+
+          <div className="col-sm-12">
+          </div>
 
           <nav className="navbar navbar-expand navbar-dark bg-dark justify-content-center">
             <div className="navbar-nav mr-auto">
@@ -82,16 +97,10 @@ class App extends Component {
                 <Link to="/" className="nav-link">Home</Link>
               </li>
 
-              {/*<li className="nav-item">*/}
-              {/*  <Link to="/posts" className="nav-link">Posts</Link>*/}
-              {/*</li>*/}
 
-
-              {/*{currUser && (*/}
-                  <li className="nav-item">
-                    <Link to="/newpost" className="nav-link">New Post</Link>
-                  </li>
-              {/*)}*/}
+              <li className="nav-item">
+                <Link to="/newpost" className="nav-link">New Post</Link>
+              </li>
 
               {!currUser && (
                   <li className="nav-item">
@@ -112,11 +121,6 @@ class App extends Component {
                     </a>
                   </li>
               )}
-
-
-              {/*<li className="nav-item">*/}
-              {/*  <Link to="/account/retrieve" className="nav-link">Retrieve</Link>*/}
-              {/*</li>*/}
 
             </div>
 
@@ -140,16 +144,6 @@ class App extends Component {
   }
 
 
-}
-
-export const Home = () => {
-  return <h1>Cornell Second-hand Trading!</h1>
-}
-export const About = () => {
-  return <div>This is the page where you put details about yourself</div>
-}
-export const NotFound = () => {
-  return <div>This is a 404 page</div>
 }
 
 

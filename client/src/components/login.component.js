@@ -5,6 +5,7 @@ import PostServices from "../services/post.services";
 import UtilsServices from "../services/utils.services";
 import getJWTHeader from "../services/jwtHeader.services";
 import {Link} from "react-router-dom";
+import {Col, Container, Form, FormControl, InputGroup, Row} from "react-bootstrap";
 
 
 
@@ -326,133 +327,150 @@ class LoginComponent extends Component {
                     </div>
                 ) : (
                     <div>
-                        <p>Please Log in</p>
-                        <div className="card card-container">
-                            <form>
-                                <h5>Log in</h5>
-                                <div className="form-group">
-                                    <label htmlFor="username">Username</label>
-                                    <input
-                                        type={"text"}
-                                        className="form-control"
-                                        name="loginUserName"
-                                        value={this.state.loginUsername}
-                                        onChange={this.onChangeLoginUsername}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="username">Password</label>
-                                    <input
-                                        type={"password"}
-                                        className="form-control"
-                                        name="loginUserName"
-                                        value={this.state.loginPassword}
-                                        onChange={this.onChangeLoginPassword}
-                                    />
-                                </div>
-                                <button
-                                    className="btn btn-primary btn-block"
-                                    disabled={this.state.loginLoading ||
-                                    this.state.loginUsernameEmpty ||
-                                    this.state.loginPasswordEmpty}
-                                    onClick={this.handleLogin}
-                                >
-                                    {this.state.loginLoading && (
-                                        <span className="spinner-border spinner-border-sm"></span>
-                                    )}
-                                    <span>Log in</span>
-                                </button>
-                                <Link to="/account/retrieve">
-                                    <button
-                                        className="btn btn-outline-secondary"
-                                    >
-                                        Forgot password
-                                    </button>
-                                </Link>
-                                {this.state.loginMessage && (
-                                    <div className="form-group">
-                                        <div className="alert alert-danger" role="alert">
-                                            {this.state.loginMessage}
-                                        </div>
+                        <h4 className="sub-title login-page-title">Please Log in or Sign up</h4>
+                        <Container>
+                            <Row className="justify-content-md-center">
+                                <Col md="auto">
+                                    <div className="card card-container" style={{width: '100%'}}>
+                                        <form>
+                                            <h5>Log in</h5>
+                                            <InputGroup className="mb-lg-3">
+                                                <InputGroup.Text>
+                                                    Username
+                                                </InputGroup.Text>
+                                                <FormControl
+                                                    placeholder="NetID@cornell.edu"
+                                                    onChange={this.onChangeLoginUsername}
+                                                    value={this.state.loginUsername}
+                                                />
+                                            </InputGroup>
+                                            <InputGroup className="mb-lg-3">
+                                                <InputGroup.Text>
+                                                    Password
+                                                </InputGroup.Text>
+                                                <FormControl
+                                                    type="password"
+                                                    placeholder="password"
+                                                    onChange={this.onChangeLoginPassword}
+                                                    value={this.state.loginPassword}
+                                                />
+                                            </InputGroup>
+
+                                            <button
+                                                className="btn btn-outline-primary btn-block"
+                                                disabled={this.state.loginLoading ||
+                                                this.state.loginUsernameEmpty ||
+                                                this.state.loginPasswordEmpty}
+                                                onClick={this.handleLogin}
+                                            >
+                                                {this.state.loginLoading && (
+                                                    <span className="spinner-border spinner-border-sm"></span>
+                                                )}
+                                                <span>Log in</span>
+                                            </button>
+                                            <Link to="/account/retrieve">
+                                                <button
+                                                    className="btn btn-outline-secondary"
+                                                >
+                                                    Forgot password
+                                                </button>
+                                            </Link>
+                                            {this.state.loginMessage && (
+                                                <div className="form-group">
+                                                    <div className="alert alert-danger" role="alert">
+                                                        {this.state.loginMessage}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </form>
                                     </div>
-                                )}
-                            </form>
-                        </div>
-                        <label></label>
-                        <div className="card card-container">
-                            <form>
-                                <h5>Sign up</h5>
-                                <div className="form-group">
-                                    <label htmlFor="username">Username</label>
-                                    <input
-                                        type={"text"}
-                                        className="form-control"
-                                        name="signupUsername"
-                                        value={this.state.signupUsername}
-                                        onChange={this.onChangeSignupUsername}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="password">Password</label>
-                                    <input
-                                        type={"password"}
-                                        className="form-control"
-                                        name="signupPassword"
-                                        value={this.state.signupPassword}
-                                        onChange={this.onChangeSignupPassword}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="verificationCode">Verification code</label>
-                                    <input
-                                        type={"text"}
-                                        className="form-control"
-                                        name="signupVerificationCode"
-                                        value={this.state.signupVerificationCode}
-                                        onChange={this.onChangeSignupVeriCode}
-                                    />
-                                    {this.state.signupVeriMsg && (
-                                        <div className="form-group">
-                                            <div className="alert-success" role="alert">
-                                                {this.state.signupVeriMsg}
-                                            </div>
-                                        </div>
-                                    )}
-                                    <button
-                                        className="btn-sm"
-                                        disabled={this.state.signupLoading ||
-                                        this.state.signupUsernameEmpty ||
-                                        this.state.signupSendVeriFrozen }
-                                        onClick={this.handleSendVerificationCode}
-                                    >
-                                        {this.state.signupSendVeriFrozen && (
-                                            <span className="spinner-border spinner-border-sm"></span>
-                                        )}
-                                        <span>Get Verification Code</span>
-                                    </button>
-                                </div>
-                                <button
-                                    className="btn btn-primary btn-block"
-                                    disabled={this.state.signupLoading ||
-                                    this.state.signupUsernameEmpty ||
-                                    this.state.signupPasswordEmpty ||
-                                    this.state.signupVerificationCodeEmpty}
-                                    onClick={this.handleSignup}
-                                >
-                                    {this.state.signupLoading && (
-                                        <span className="spinner-border spinner-border-sm"></span>
-                                    )}
-                                    <span>Sign up</span>
-                                </button>
-                                {this.state.signupMessage && (
-                                    <div className="form-group">
-                                        <div className="alert alert-danger" role="alert">
-                                            {this.state.signupMessage}
-                                        </div>
+                                </Col>
+
+
+                                <Col md="auto">
+                                    <div className="card card-container" style={{width: '100%'}}>
+                                        <form>
+                                            <h5>Sign up</h5>
+                                            <InputGroup className="mb-lg-3">
+                                                <InputGroup.Text>
+                                                    Username
+                                                </InputGroup.Text>
+                                                <FormControl
+                                                    placeholder="NetID@cornell.edu"
+                                                    onChange={this.onChangeSignupUsername}
+                                                    value={this.state.signupUsername}
+                                                />
+                                            </InputGroup>
+                                            <InputGroup className="mb-lg-3">
+                                                <InputGroup.Text>
+                                                    Password
+                                                </InputGroup.Text>
+                                                <FormControl
+                                                    type="password"
+                                                    placeholder="password"
+                                                    onChange={this.onChangeSignupPassword}
+                                                    value={this.state.signupPassword}
+                                                />
+
+                                            </InputGroup>
+                                            <InputGroup className="mb-lg-3">
+                                                <InputGroup.Text>
+                                                    Verification code
+                                                </InputGroup.Text>
+                                                <FormControl
+                                                    type="text"
+                                                    placeholder="Verification code"
+                                                    onChange={this.onChangeSignupVeriCode}
+                                                    value={this.state.signupVerificationCode}
+                                                />
+                                                <button
+                                                    className="btn btn-outline-secondary"
+                                                    onClick={this.handleSendVerificationCode}
+                                                    disabled={this.state.signupLoading ||
+                                                    this.state.signupUsernameEmpty ||
+                                                    this.state.signupSendVeriFrozen}
+                                                    >
+                                                    Get code
+                                                </button>
+                                            </InputGroup>
+
+                                            {this.state.signupVeriMsg && (
+                                                <div className="form-group">
+                                                    <div className="alert-success" role="alert">
+                                                        {this.state.signupVeriMsg}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            <button
+                                                className="btn btn-outline-primary btn-block"
+                                                disabled={this.state.signupLoading ||
+                                                this.state.signupUsernameEmpty ||
+                                                this.state.signupPasswordEmpty ||
+                                                this.state.signupVerificationCodeEmpty}
+                                                onClick={this.handleSignup}
+                                            >
+                                                {this.state.signupLoading && (
+                                                    <span className="spinner-border spinner-border-sm"></span>
+                                                )}
+                                                <span>Sign up</span>
+                                            </button>
+
+
+
+                                            {this.state.signupMessage && (
+                                                <div className="form-group">
+                                                    <div className="alert alert-danger" role="alert">
+                                                        {this.state.signupMessage}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </form>
                                     </div>
-                                )}
-                            </form>
-                        </div>
+                                </Col>
+                            </Row>
+
+                        </Container>
                     </div>
                 )}
 

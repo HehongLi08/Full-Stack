@@ -52,7 +52,7 @@ class MainPageComponent extends Component {
             <div className="list row">
                 <div >
                     <h1>
-                        Cornell Second-hand Trading
+                        Main Page
                     </h1>
                 </div>
 
