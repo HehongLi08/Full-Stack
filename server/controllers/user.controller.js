@@ -321,12 +321,12 @@ const retrieveSendCode = async function(req, res) {
 
 
         await transporter.sendMail(mailData, (error, info) => {
-            // if (error) {
-            //     console.log(error);
-            // }
-            // else {
-            //     console.log(info);
-            // }
+            if (error) {
+                console.log(error);
+            }
+            else {
+                console.log(info);
+            }
         })
         return res.status(200).send( {
             message: "The verification code has been sent to your email!"
