@@ -3,6 +3,7 @@ import Config from "../config/config";
 // import UserServices from "../services/user.services";
 import PostServices from "../services/post.services";
 import {Link} from "react-router-dom";
+import {FormControl, InputGroup} from "react-bootstrap";
 
 
 class MainPageComponent extends Component {
@@ -49,51 +50,67 @@ class MainPageComponent extends Component {
     render() {
         const { posts } = this.state;
         return (
-            <div className="list row">
-                <div >
-                    <h1>
-                        Main Page
-                    </h1>
-                </div>
+            <div>
+                {/*<div>*/}
+                {/*    <h1>*/}
+                {/*        Main Page*/}
+                {/*    </h1>*/}
+                {/*</div>*/}
 
 
-                <div className="align-content-center">
+                <div className="main-page-input-box">
                     <form>
-                        <span>Items: </span>
-                        <input
-                            value={this.state.searchTitle}
-                            onChange={this.searchTitleOnchange}
-                        />
-                        <button className="btn-primary" onClick={this.onClickSearch}>
-                            Search
-                        </button>
+                        <InputGroup className="mb-lg-3">
+                            <InputGroup.Text>
+                                Find something you want:
+                            </InputGroup.Text>
+                            <FormControl
+                                placeholder="Item Name"
+                                onChange={this.searchTitleOnchange}
+                                value={this.state.searchTitle}
+                            />
+                            <button className="btn btn-outline-primary btn-block" onClick={this.onClickSearch}>
+                                Search
+                            </button>
+                        </InputGroup>
                     </form>
                 </div>
+
 
 
                 <div>
                     {posts.length !== 0 ? (
                         <div>
-                            {posts && posts.map( (p, i) => (
-                                <div className="card-container" key={p._id}>
-                                    <Link to={/post/ + p._id}>
-                                        <div className="card-header">
-                                            {"Title: " + p.title}
-                                        </div>
-                                    </Link>
+                            <div className="main-page-content-container">
+                                {posts && posts.map( (p, i) => (
+                                    <div className="card main-page-content-card">
+                                        {p.images &&
+                                        <img
+                                            className="card-img-top main-page-content-img"
+                                            alt={p.images[0]}
+                                            src={Config.baseUrl + Config.imgGetRoute + p.images[0]}
+                                        />}
 
-                                    <div className="card-body">
-                                        {"Price: " + p.price}
+                                        <div className="card-body">
+                                            <Link to={"/post/" + p._id}>
+                                                <h5>{p.title}</h5>
+                                            </Link>
+                                            <p>{"Price: " + p.price}</p>
+                                            <p>{"Description: " + p.description}</p>
+                                        </div>
                                     </div>
-                                    {p.images && p.images.map( img => (
-                                        <img src={Config.baseUrl + Config.imgGetRoute + img} alt={img} width="10%" key={img} />
-                                    ))}
-                                </div>
-                            ))}
+                                ))}
+                            </div>
+                            <div>
+                                {posts && (
+                                    <p>{posts.length + " item(s) found."}</p>
+                                )}
+                            </div>
 
                         </div>
+
                     ) : (
-                        <div>
+                        <div className="main-page-alert">
                             <h4>No Content Found</h4>
                         </div>
                     )}

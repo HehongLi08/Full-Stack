@@ -125,98 +125,75 @@ class RetrieveAccountComponent extends Component {
         return (
             <div>
                 {!submitted ? (
-
-                    <div className="justify-content-md-center">
-                            <div className="" style={{width: "30%", left: "50%" }}>
-                                <form>
-                                    <InputGroup className="mb-lg-3">
-                                        <InputGroup.Text>
-                                            Username
-                                        </InputGroup.Text>
-                                        <FormControl
-                                            placeholder="NetID@cornell.edu"
-                                            onChange={this.onChangeUsername}
-                                            value={this.state.username}
-                                        />
-                                    </InputGroup>
-                                </form>
-                            </div>
-                        <form>
-                            <InputGroup className="mb-lg-3">
-                                <InputGroup.Text>
-                                    Username
-                                </InputGroup.Text>
-                                <FormControl
-                                    placeholder="NetID@cornell.edu"
-                                    onChange={this.onChangeUsername}
-                                    value={this.state.username}
-                                />
-                            </InputGroup>
-
-                            <div>
-                                <label>Username: </label>
-                                <input
-                                    type="text"
-                                    value={this.state.username}
-                                    onChange={this.onChangeUsername}
-                                />
-                            </div>
-                            <label></label>
-                            <div>
-                                <label> New password: </label>
-                                <input
-                                    type="password"
-                                    value={this.state.password}
-                                    onChange={this.onChangePassword}
-                                />
-                            </div>
-                            <label></label>
-                            <div>
-                                <label>Verification code: </label>
-                                <input
-                                    type="text"
-                                    value={this.state.token}
-                                    onChange={this.onChangeToken}
-                                />
-                                <p></p>
-
+                    <div className="justify-content-md-center" >
+                        <h4>Reset your password</h4>
+                        <div className="input-div">
+                            <form>
+                                <InputGroup className="mb-lg-3">
+                                    <InputGroup.Text>
+                                        Username
+                                    </InputGroup.Text>
+                                    <FormControl
+                                        placeholder="NetID@cornell.edu"
+                                        onChange={this.onChangeUsername}
+                                        value={this.state.username}
+                                    />
+                                </InputGroup>
+                                <InputGroup className="mb-lg-3">
+                                    <InputGroup.Text>
+                                        New Password
+                                    </InputGroup.Text>
+                                    <FormControl
+                                        type="password"
+                                        placeholder="Your Password"
+                                        onChange={this.onChangePassword}
+                                        value={this.state.password}
+                                    />
+                                </InputGroup>
+                                <InputGroup className="mb-lg-3">
+                                    <InputGroup.Text>
+                                        Verification Code
+                                    </InputGroup.Text>
+                                    <FormControl
+                                        type="text"
+                                        placeholder="Verification Code"
+                                        onChange={this.onChangeToken}
+                                        value={this.state.token}
+                                    />
+                                    <button
+                                        className="btn btn-outline-secondary"
+                                        disabled={!this.state.username}
+                                        onClick={this.handleSendVeriCode}
+                                    >
+                                        Get Code
+                                    </button>
+                                </InputGroup>
                                 {this.state.tokenSentMsg && (
                                     <div className="alert-success">
                                         {this.state.tokenSentMsg}
                                     </div>
                                 )}
 
-
                                 <button
-                                    className="btn btn-outline-primary"
-                                    disabled={!this.state.username}
-                                    onClick={this.handleSendVeriCode}
+                                    className="btn btn-outline-primary btn-block"
+                                    disabled={!this.state.username ||
+                                    !this.state.password ||
+                                    !this.state.token ||
+                                    this.state.loading }
+                                    onClick={this.handleRest}
                                 >
-                                    Send Verification Code
+                                    Submit
                                 </button>
-                            </div>
+                                {errMsg && (
+                                    <div className="alert alert-danger">
+                                        {errMsg}
+                                    </div>
+                                )}
+                            </form>
 
-                            {errMsg && (
-                                <div className="alert alert-danger">
-                                    {errMsg}
-                                </div>
-                            )}
-
-                            <button
-                                className="btn btn-primary"
-                                disabled={!this.state.username ||
-                                !this.state.password ||
-                                !this.state.token ||
-                                this.state.loading }
-                                onClick={this.handleRest}
-                            >
-                                Submit
-                            </button>
+                        </div>
 
 
-
-                        </form>
-                        <h4>Reset your password</h4>
 
                     </div>
                 ) : (
@@ -225,7 +202,8 @@ class RetrieveAccountComponent extends Component {
                             <span>The password of your account has been reset.</span>
                         </div>
                         <Link to="/login">
-                            <button>
+                            <button className="btn btn-outline-primary btn-block"
+                            >
                                 Log in
                             </button>
                         </Link>

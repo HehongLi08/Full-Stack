@@ -95,35 +95,41 @@ class ProfileComponent extends Component {
                         {logged ? (
                             // logged in successfully--------------------------
                             <div>
-                                <div className="card card-container">
-                                    <span>{"Username: " + user.username}</span>
-                                    <span>{"ID: " + user._id}</span>
-                                    <button className="btn-primary" onClick={this.logout}>Log out</button>
+                                <div className="profile-page-container">
+                                    <div className="card card-container">
+                                        <span>{"Username: " + user.username}</span>
+                                        <span>{"ID: " + user._id}</span>
+                                    </div>
+                                    <button className="btn btn-outline-danger" onClick={this.logout}>Log out</button>
+
                                 </div>
+
 
                                 <div className="align-middle">
                                     <h5>My posts</h5>
                                     <Link to={"newpost"}>
-                                        <button className="btn-primary">Post a new one!</button>
+                                        <button className="btn btn-outline-success">Post a new one!</button>
                                     </Link>
-                                    {posts && posts.map( p => (
-                                        <div>
-                                            <div className="card-container" key={p._id}>
-                                                <Link to={"/post/" + p._id}>
-                                                    <h5>{p.title}</h5>
-                                                </Link>
-                                                <p>{"Description: " + p.description}</p>
-                                                <p>{"Last updated: " + p.updatedAt}</p>
-                                                {p.images && p.images.map(img => (
-                                                    <img src={Config.baseUrl + Config.imgGetRoute + img} alt={img} width="50%"/>
-                                                ))}
+
+                                    <div className="main-page-content-container">
+                                        {posts && posts.map( p => (
+                                            <div className="card main-page-content-card">
+                                                <div className="card-container" key={p._id}>
+                                                    {p.images && <img
+                                                        className="card-img-top main-page-content-img"
+                                                        alt={p.images[0]}
+                                                        src={Config.baseUrl + Config.imgGetRoute + p.images[0]}
+                                                    />}
+                                                    <Link to={"/post/" + p._id}>
+                                                        <h5>{p.title}</h5>
+                                                    </Link>
+                                                    <p>{"Description: " + p.description}</p>
+                                                    <p>{"Last updated: " + p.updatedAt}</p>
+                                                </div>
+                                                <p></p>
                                             </div>
-                                            <p></p>
-                                        </div>
-
-
                                         ))}
-
+                                    </div>
                                 </div>
                             </div>
 

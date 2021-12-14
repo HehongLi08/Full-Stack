@@ -252,10 +252,10 @@ class PostDetailComponent extends Component {
                                                 <p>{"Last modified at: " + post.updatedAt}</p>
                                                 {owner && (
                                                     <div>
-                                                        <button className="btn-outline-success" onClick={this.enterLoginMode}>
+                                                        <button className="btn btn-outline-success" onClick={this.enterLoginMode}>
                                                             Edit
                                                         </button>
-                                                        <button className="btn-outline-danger" onClick={this.handleDelete}>
+                                                        <button className="btn btn-outline-danger" onClick={this.handleDelete}>
                                                             Delete
                                                         </button>
                                                     </div>
@@ -280,10 +280,10 @@ class PostDetailComponent extends Component {
                                                         <br/>
                                                         Photos: <input type="file" onChange={this.onChangeImages} multiple/>
                                                         <br/>
-                                                        <button className="btn-close-white" onClick={this.exitEditMode} disabled={loading}>
+                                                        <button className="btn btn-outline-dark" onClick={this.exitEditMode} disabled={loading}>
                                                             Cancel
                                                         </button>
-                                                        <button className="btn-success" onClick={this.handleSubmitUpdate} disabled={loading}>
+                                                        <button className="btn btn-outline-success" onClick={this.handleSubmitUpdate} disabled={loading}>
                                                             Submit
                                                         </button>
                                                     </form>
@@ -314,7 +314,7 @@ class PostDetailComponent extends Component {
                             <div>
                                 <h4>Please login to see the detail of the post</h4>
                                 <Link to="/login">
-                                    <button>
+                                    <button className="btn btn-outline-primary">
                                         Log in / Sign up
                                     </button>
                                 </Link>

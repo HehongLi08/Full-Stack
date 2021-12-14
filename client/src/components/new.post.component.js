@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import UserServices from "../services/user.services";
 import PostServices from "../services/post.services";
 import getJWTHeader from "../services/jwtHeader.services";
+import {Form, FormControl, InputGroup} from "react-bootstrap";
 // import Config from "../config/config";
 
 
@@ -163,17 +164,49 @@ class NewPostComponent extends Component {
                                 {!posted ? (
                                     <div>
                                         <h4>Create a new Post</h4>
-                                        <div className="card-container">
+                                        <div className="card-container new-post-input-form">
                                             <form>
-                                                Title: <input type="text" onChange={this.onChangeTitle} value={this.state.editTitle}/>
-                                                <br/>
-                                                Description: <input type="text" onChange={this.onChangeDescription} value={this.state.editDescription}/>
-                                                <br/>
-                                                Price: <input type="text" onChange={this.onChangePrice} value={this.state.editPrice}/>
-                                                <br/>
-                                                Photos: <input type="file" onChange={this.onChangeImages} multiple/>
-                                                <br/>
-                                                <button className="btn-success" onClick={this.handleSubmit} disabled={loading}>
+                                                <InputGroup className="mb-lg-3">
+                                                    <InputGroup.Text>
+                                                        Title
+                                                    </InputGroup.Text>
+                                                    <FormControl
+                                                        placeholder="Title"
+                                                        onChange={this.onChangeTitle}
+                                                        value={this.state.editTitle}
+                                                    />
+                                                </InputGroup>
+
+                                                <InputGroup className="mb-lg-3">
+                                                    <InputGroup.Text>
+                                                        Price
+                                                    </InputGroup.Text>
+                                                    <FormControl
+                                                        placeholder="Price"
+                                                        onChange={this.onChangePrice}
+                                                        value={this.state.editPrice}
+                                                    />
+                                                </InputGroup>
+
+                                                <InputGroup className="mb-lg-3">
+                                                    <InputGroup.Text>
+                                                        Description
+                                                    </InputGroup.Text>
+                                                    <FormControl
+                                                        as="textarea"
+                                                        placeholder="Description"
+                                                        onChange={this.onChangeDescription}
+                                                        value={this.state.editDescription}
+                                                    />
+                                                </InputGroup>
+
+                                                <Form.Group controlId="formFileMultiple" className="mb-3">
+                                                    <Form.Label>Images</Form.Label>
+                                                    <Form.Control type="file" multiple onChange={this.onChangeImages}/>
+                                                </Form.Group>
+
+
+                                                <button className="btn btn-outline-success" onClick={this.handleSubmit} disabled={loading}>
                                                     Submit
                                                 </button>
                                             </form>
@@ -184,9 +217,12 @@ class NewPostComponent extends Component {
                                                     </div>
                                                 </div>
                                             )}
-                                            {imgPreviewUrls && imgPreviewUrls.map( (srcUrl) => (
-                                                <img src={srcUrl} width="40%" alt={srcUrl}/>
-                                            ))}
+                                            <div className="new-post-img-preview">
+                                                {imgPreviewUrls && imgPreviewUrls.map( (srcUrl) => (
+                                                    <img src={srcUrl} width="40%" alt={srcUrl}/>
+                                                ))}
+                                            </div>
+
 
                                         </div>
                                     </div>
@@ -194,9 +230,9 @@ class NewPostComponent extends Component {
                                     <div>
                                         <h5>{"Posted successfully!"}</h5>
                                         <Link to={"/"}>
-                                            <button className="btn-primary">Home Page</button>
+                                            <button className="btn btn-outline-primary">Home Page</button>
                                         </Link>
-                                        <button className="btn-primary"
+                                        <button className="btn btn-outline-primary"
                                                 onClick={() => {
                                                     window.location.reload();
                                                 }}>

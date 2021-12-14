@@ -76,51 +76,64 @@ class App extends Component {
     const { currUser } = this.state;
     return (
         <div className="App">
-          <Container fluid="md">
-              <Row>
-                  <Col lg="4">
-                      <Image src="./cornell-logo.png" width="20%" fluid/>
-                  </Col>
-                  <Col lg="8"><h1>Cornell Second-hand Mall</h1></Col>
-              </Row>
+            {/*<div>*/}
+            {/*    <div>*/}
+            {/*        <Image src="./cornell-logo.png" width="60px" fluid/>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
+          {/*<Container fluid="md">*/}
+          {/*    <Row>*/}
+          {/*        <Col lg="4">*/}
+          {/*            <Image src="./cornell-logo.png" width="20%" fluid/>*/}
+          {/*        </Col>*/}
+          {/*        <Col lg="8"><h1>Cornell Second-hand Mall</h1></Col>*/}
+          {/*    </Row>*/}
 
 
-          </Container>
+          {/*</Container>*/}
 
-          <div className="col-sm-12">
+          <div>
+              <h1>Cornell Second-hand Shopping Mall</h1>
           </div>
 
-          <nav className="navbar navbar-expand navbar-dark bg-dark justify-content-center">
+          <nav className="navbar navbar-expand navbar-light bg-light justify-content-center">
             <div className="navbar-nav mr-auto">
 
-              <li className="nav-item">
-                <Link to="/" className="nav-link">Home</Link>
-              </li>
+                <a class="navbar-brand" href="/">
+                    Home
+                </a>
+
+                <ul className="navbar-nav">
+                    {/*<li className="nav-item">*/}
+                    {/*    <Link to="/" className="nav-link">Home</Link>*/}
+                    {/*</li>*/}
 
 
-              <li className="nav-item">
-                <Link to="/newpost" className="nav-link">New Post</Link>
-              </li>
+                    <li className="nav-item">
+                        <Link to="/newpost" className="nav-link">New Post</Link>
+                    </li>
 
-              {!currUser && (
-                  <li className="nav-item">
-                    <Link to="/login" className="nav-link">Login/Signup</Link>
-                  </li>
-              )}
+                    {!currUser && (
+                        <li className="nav-item">
+                            <Link to="/login" className="nav-link">Login/Signup</Link>
+                        </li>
+                    )}
 
-              {currUser && (
-                  <li className="nav-item">
-                    <Link to="/profile" className="nav-link">My Page</Link>
-                  </li>
-              )}
+                    {currUser && (
+                        <li className="nav-item">
+                            <Link to="/profile" className="nav-link">My Page</Link>
+                        </li>
+                    )}
 
-              {currUser && (
-                  <li className="nav-item">
-                    <a href="/" onClick={this.logout} className="nav-link">
-                      Logout
-                    </a>
-                  </li>
-              )}
+                    {currUser && (
+                        <li className="nav-item">
+                            <a href="/" onClick={this.logout} className="nav-link">
+                                Logout
+                            </a>
+                        </li>
+                    )}
+                </ul>
+
 
             </div>
 

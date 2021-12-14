@@ -37,6 +37,80 @@
   }
 }
 
-.card-container.card {
-  max-width: 350px;
+/*************************************************************
+* Main Page CSS
+ *************************************************************/
+.main-page-input-box {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  margin-top: 20px;
+  margin-bottom: 50px;
+
 }
+
+.main-page-content-container {
+  margin-left: auto;
+  margin-right: auto;
+  background-color: rgba(250, 73, 73, 0.11);
+  width: 90%;
+  /*height: 700px;*/
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.main-page-content-card {
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: auto;
+  /*margin-left: 20px;*/
+  background-color: coral;
+}
+
+.main-page-content-img {
+  width: 20%;
+}
+
+
+/*************************************************************
+* Profile CSS
+ *************************************************************/
+.profile-page-container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+
+/*************************************************************
+* New Post CSS
+ *************************************************************/
+.new-post-input-form {
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+  /*background-color: rgba(255, 127, 80, 0.27);*/
+}
+
+.new-post-img-preview {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+}
+
+
+/*************************************************************
+* Utility CSS
+ *************************************************************/
+.input-div {
+  width: 30%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
