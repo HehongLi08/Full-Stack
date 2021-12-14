@@ -314,7 +314,7 @@ class PostDetailComponent extends Component {
                             <div>
                                 <h4>Please login to see the detail of the post</h4>
                                 <Link to="/login">
-                                    <button className="btn btn-outline-primary">
+                                    <button className="btn btn-outline-secondary">
                                         Log in / Sign up
                                     </button>
                                 </Link>

@@ -2,7 +2,7 @@
 
 
 const Config = {
-    baseUrl: "http://192.168.1.104:8080",
+    baseUrl: "http://10.49.2.48:8080",
 
     // baseUrl: "http://localhost:8080",
     imgGetRoute: "/img/retrieve/"

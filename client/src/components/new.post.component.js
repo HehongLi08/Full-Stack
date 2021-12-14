@@ -200,10 +200,14 @@ class NewPostComponent extends Component {
                                                     />
                                                 </InputGroup>
 
-                                                <Form.Group controlId="formFileMultiple" className="mb-3">
-                                                    <Form.Label>Images</Form.Label>
-                                                    <Form.Control type="file" multiple onChange={this.onChangeImages}/>
-                                                </Form.Group>
+                                                <InputGroup>
+                                                    <Form.Group controlId="formFileMultiple" className="mb-3">
+                                                        <Form.Label>Images</Form.Label>
+                                                        <Form.Control type="file" multiple onChange={this.onChangeImages}/>
+                                                    </Form.Group>
+                                                </InputGroup>
+
+
 
 
                                                 <button className="btn btn-outline-success" onClick={this.handleSubmit} disabled={loading}>
@@ -245,7 +249,7 @@ class NewPostComponent extends Component {
                             <div>
                                 <h4>Please log in first</h4>
                                 <Link to={"/login"}>
-                                    <button className="btn-primary">
+                                    <button className="btn btn-outline-primary">
                                         Login / Signup
                                     </button>
                                 </Link>
