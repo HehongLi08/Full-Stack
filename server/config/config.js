@@ -4,13 +4,13 @@ module.exports = {
     url: "mongodb://localhost:27017/",
     database: "ece5725",
     imgBucket: "images",
-    imgBaseUrl: "http://10.49.2.48:8080/img/retrieve/",
+    imgBaseUrl: "http://192.168.1.102:8080/img/retrieve/",
     imgUploadFieldName: "images",
     maxImgCnt: 12,
 
 
     // CORS configuration---------------------------
-    corsUrl: "http://10.49.2.48:3000",
+    corsUrl: "http://192.168.1.102:3000",
 
 
     // JWT configuration----------------------------
